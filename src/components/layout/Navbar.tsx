@@ -43,7 +43,7 @@ const Navbar = () => {
             >
               <Github className="h-5 w-5" />
             </a>
-            <Button asChild size="sm" className="bg-primary hover:bg-primary/90">
+            <Button asChild size="sm" className="bg-gradient-to-r from-primary to-accent hover:opacity-90 border-0 text-white font-semibold">
               <Link to="/docs/getting-started">Get Started</Link>
             </Button>
           </div>
@@ -59,18 +59,18 @@ const Navbar = () => {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="md:hidden py-4 border-t border-border">
+          <div className="md:hidden py-4 border-t border-white/10">
             <div className="flex flex-col gap-4">
               <Link
                 to="/docs"
-                className="text-sm font-medium text-muted-foreground hover:text-foreground"
+                className="text-sm font-medium text-muted-foreground hover:text-white"
                 onClick={() => setIsOpen(false)}
               >
                 Docs
               </Link>
               <Link
                 to="/docs/rules"
-                className="text-sm font-medium text-muted-foreground hover:text-foreground"
+                className="text-sm font-medium text-muted-foreground hover:text-white"
                 onClick={() => setIsOpen(false)}
               >
                 Rules
@@ -79,12 +79,12 @@ const Navbar = () => {
                 href="https://github.com/serenitysz/serenity"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm font-medium text-muted-foreground hover:text-foreground flex items-center gap-2"
+                className="text-sm font-medium text-muted-foreground hover:text-white flex items-center gap-2"
               >
                 <Github className="h-4 w-4" />
                 GitHub
               </a>
-              <Button asChild size="sm" className="bg-primary hover:bg-primary/90 w-fit">
+              <Button asChild size="sm" className="bg-gradient-to-r from-primary to-accent hover:opacity-90 w-fit text-white font-semibold">
                 <Link to="/docs/getting-started" onClick={() => setIsOpen(false)}>
                   Get Started
                 </Link>

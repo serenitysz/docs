@@ -11,6 +11,8 @@ import GettingStarted from "./pages/docs/GettingStarted";
 import CLIReference from "./pages/docs/CLIReference";
 import Configuration from "./pages/docs/Configuration";
 import Rules from "./pages/docs/Rules";
+import Login from "./pages/Login";
+import Admin from "./pages/Admin";
 
 const queryClient = new QueryClient();
 
@@ -19,9 +21,11 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
+      <BrowserRouter basename={import.meta.env.BASE_URL}>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/admin" element={<Admin />} />
           <Route path="/docs" element={<DocsLayout />}>
             <Route index element={<Introduction />} />
             <Route path="getting-started" element={<GettingStarted />} />
