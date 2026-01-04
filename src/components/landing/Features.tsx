@@ -4,17 +4,18 @@ import { Zap, Shield, Terminal, Settings } from "lucide-react";
 const codeLines = [
   { text: 'package main', delay: 0 },
   { text: '', delay: 100 },
-  { text: 'import "github.com/serenitysz/serenity"', delay: 200 },
+  { text: 'import "fmt"', delay: 200 },
   { text: '', delay: 300 },
   { text: 'func main() {', delay: 400 },
-  { text: '    // Serenity catches this instantly', delay: 500 },
-  { text: '    cfg := serenity.NewConfig()', delay: 600 },
-  { text: '    cfg.EnableRule("shadow-variable")', delay: 700 },
-  { text: '    cfg.EnableRule("unused-param")', delay: 800 },
-  { text: '    cfg.EnableRule("error-handling")', delay: 900 },
+  { text: '    messages := make(chan string)', delay: 500 },
+  { text: '', delay: 600 },
+  { text: '    go func() {', delay: 700 },
+  { text: '        messages <- "ping"', delay: 800 },
+  { text: '    }()', delay: 900 },
   { text: '', delay: 1000 },
-  { text: '    serenity.Run(cfg) // < 1.2s for 100k LOC', delay: 1100 },
-  { text: '}', delay: 1200 },
+  { text: '    msg := <-messages', delay: 1100 },
+  { text: '    fmt.Println(msg)', delay: 1200 },
+  { text: '}', delay: 1300 },
 ];
 
 const features = [
