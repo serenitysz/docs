@@ -4,24 +4,36 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sparkles } from "lucide-react";
 import serenityLogo from "@/assets/serenity-logo.png";
+import { addToWaitlist } from "@/lib/waitlist";
 
 const Hero = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) {
       toast.error("Please enter a valid email address.");
       return;
     }
+    
     setLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      const response = await addToWaitlist(email);
+      
+      if (!response.success) {
+        toast.error(response.message);
+        setLoading(false);
+        return;
+      }
+
+      toast.success(response.message);
       setEmail("");
-      toast.success("You've been added to the waitlist!");
-    }, 1000);
+    } catch (error) {
+      toast.error("An unexpected error occurred.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
