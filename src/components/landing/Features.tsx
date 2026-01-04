@@ -1,21 +1,23 @@
 import { useEffect, useState } from "react";
 import { Zap, Shield, Terminal, Settings } from "lucide-react";
+import { Highlight } from "prism-react-renderer";
+import { rosePineTheme } from "@/lib/prism-theme";
 
 const codeLines = [
-  { text: 'package main', delay: 0 },
-  { text: '', delay: 100 },
-  { text: 'import "fmt"', delay: 200 },
-  { text: '', delay: 300 },
-  { text: 'func main() {', delay: 400 },
-  { text: '    messages := make(chan string)', delay: 500 },
-  { text: '', delay: 600 },
-  { text: '    go func() {', delay: 700 },
-  { text: '        messages <- "ping"', delay: 800 },
-  { text: '    }()', delay: 900 },
-  { text: '', delay: 1000 },
-  { text: '    msg := <-messages', delay: 1100 },
-  { text: '    fmt.Println(msg)', delay: 1200 },
-  { text: '}', delay: 1300 },
+  'package main',
+  '',
+  'import "fmt"',
+  '',
+  'func main() {',
+  '    messages := make(chan string)',
+  '',
+  '    go func() {',
+  '        messages <- "ping"',
+  '    }()',
+  '',
+  '    msg := <-messages',
+  '    fmt.Println(msg)',
+  '}',
 ];
 
 const features = [
@@ -64,27 +66,26 @@ const Features = () => {
   useEffect(() => {
     if (!isVisible) return;
 
-    codeLines.forEach((line, index) => {
-      setTimeout(() => {
+    // Reset visible lines when component becomes visible
+    setVisibleLines([]);
+
+    const timeouts: NodeJS.Timeout[] = [];
+    codeLines.forEach((_, index) => {
+      const timeout = setTimeout(() => {
         setVisibleLines((prev) => [...prev, index]);
-      }, line.delay);
+      }, index * 100); // Stagger the appearance
+      timeouts.push(timeout);
     });
+    
+    return () => timeouts.forEach(clearTimeout);
   }, [isVisible]);
 
-  const highlightSyntax = (text: string) => {
-    return text
-      .replace(/(package|import|func|return)/g, '<span class="text-primary">$1</span>')
-      .replace(/(".*?")/g, '<span class="text-accent">$1</span>')
-      .replace(/(\/\/.*)/g, '<span class="text-muted-foreground">$1</span>')
-      .replace(/(\bserenity\b)/g, '<span class="text-primary font-semibold">$1</span>')
-      .replace(/(NewConfig|EnableRule|Run)/g, '<span class="text-foreground">$1</span>')
-      .replace(/(cfg)/g, '<span class="text-accent/80">$1</span>');
-  };
+  const codeString = codeLines.join('\n');
 
   return (
     <section id="features-section" className="py-24 bg-background">
       <div className="container px-4">
-        <div className="grid lg:grid-cols-2 gap-16 items-center max-w-7xl mx-auto">
+        <div className="grid lg:grid-cols-2 gap-16 items-stretch max-w-7xl mx-auto">
           {/* Left side - Content */}
           <div className="space-y-8">
             <div>
@@ -132,53 +133,34 @@ const Features = () => {
           </div>
 
           {/* Right side - Animated code block */}
-          <div className="relative">
+          <div className="relative h-full">
             {/* Glow effect */}
             <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 rounded-2xl blur-2xl opacity-50" />
             
-            <div className="relative glow-border rounded-xl overflow-hidden bg-card/80 backdrop-blur-xl">
-              {/* Header bar */}
-              <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-muted/30">
-                <div className="flex gap-1.5">
-                  <div className="w-3 h-3 rounded-full bg-destructive/60" />
-                  <div className="w-3 h-3 rounded-full bg-yellow-500/60" />
-                  <div className="w-3 h-3 rounded-full bg-green-500/60" />
-                </div>
-                <span className="text-sm text-muted-foreground ml-2 font-mono">main.go</span>
-              </div>
-
+            <div className="relative glow-border rounded-xl overflow-hidden bg-[#191724] backdrop-blur-xl h-full flex flex-col">
               {/* Code content */}
-              <div className="p-6 font-mono text-sm md:text-base overflow-x-auto">
-                <pre className="space-y-1">
-                  {codeLines.map((line, index) => (
-                    <div
-                      key={index}
-                      className={`transition-all duration-300 ${
-                        visibleLines.includes(index)
-                          ? 'opacity-100 translate-x-0'
-                          : 'opacity-0 -translate-x-4'
-                      }`}
-                    >
-                      <span className="text-muted-foreground/50 select-none mr-4">
-                        {String(index + 1).padStart(2, ' ')}
-                      </span>
-                      <span
-                        dangerouslySetInnerHTML={{
-                          __html: highlightSyntax(line.text) || '&nbsp;',
-                        }}
-                      />
-                    </div>
-                  ))}
-                </pre>
-              </div>
-
-              {/* Bottom status bar */}
-              <div className="flex items-center justify-between px-4 py-2 border-t border-border bg-muted/30 text-xs text-muted-foreground">
-                <span>Go</span>
-                <span className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                  <span>Serenity active</span>
-                </span>
+              <div className="p-10 font-mono text-xl md:text-2xl overflow-x-auto bg-[#191724] flex-1">
+                <Highlight theme={rosePineTheme} code={codeString} language="go">
+                  {({ className, style, tokens, getLineProps, getTokenProps }) => (
+                    <pre className={`${className} h-full`} style={{...style, backgroundColor: 'transparent'}}>
+                      {tokens.map((line, i) => (
+                        <div
+                          key={i}
+                          {...getLineProps({ line })}
+                          className={`transition-all duration-300 ${
+                            visibleLines.includes(i)
+                              ? 'opacity-100 translate-x-0'
+                              : 'opacity-0 -translate-x-4'
+                          }`}
+                        >
+                          {line.map((token, key) => (
+                            <span key={key} {...getTokenProps({ token })} />
+                          ))}
+                        </div>
+                      ))}
+                    </pre>
+                  )}
+                </Highlight>
               </div>
             </div>
           </div>
