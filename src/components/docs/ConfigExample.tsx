@@ -1,5 +1,4 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import CodeBlock from "./CodeBlock";
+import MultiFormatBlock from "./MultiFormatBlock";
 
 const jsonConfig = `{
   "$schema": "https://raw.githubusercontent.com/serenitysz/serenity/main/schema.json",
@@ -98,28 +97,12 @@ const tomlConfig = `"$schema" = "https://raw.githubusercontent.com/serenitysz/se
 
 const ConfigExample = () => {
   return (
-    <div className="my-8">
-      <Tabs defaultValue="json" className="w-full">
-        <TabsList className="grid w-full grid-cols-4 max-w-[400px]">
-          <TabsTrigger value="json">JSON</TabsTrigger>
-          <TabsTrigger value="yaml">YAML</TabsTrigger>
-          <TabsTrigger value="toml">TOML</TabsTrigger>
-          <TabsTrigger value="yml">YML</TabsTrigger>
-        </TabsList>
-        <TabsContent value="json">
-          <CodeBlock code={jsonConfig} language="json" filename="serenity.json" />
-        </TabsContent>
-        <TabsContent value="yaml">
-          <CodeBlock code={yamlConfig} language="yaml" filename="serenity.yaml" />
-        </TabsContent>
-        <TabsContent value="toml">
-          <CodeBlock code={tomlConfig} language="toml" filename="serenity.toml" />
-        </TabsContent>
-        <TabsContent value="yml">
-          <CodeBlock code={yamlConfig} language="yaml" filename="serenity.yml" />
-        </TabsContent>
-      </Tabs>
-    </div>
+    <MultiFormatBlock 
+      json={jsonConfig}
+      yaml={yamlConfig}
+      toml={tomlConfig}
+      fileNameBase="serenity"
+    />
   );
 };
 
