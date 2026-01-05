@@ -1,94 +1,127 @@
-import { NavLink } from "@/components/NavLink";
+import { useState, useEffect } from "react";
 import { Book, Rocket, Terminal, Settings, List } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const sidebarItems = [
   {
     title: "Introduction",
-    href: "/docs#introduction",
+    id: "introduction",
     icon: Book,
   },
   {
     title: "Getting Started",
-    href: "/docs#getting-started",
+    id: "getting-started",
     icon: Rocket,
   },
   {
     title: "CLI Reference",
-    href: "/docs#cli",
+    id: "cli",
     icon: Terminal,
   },
   {
     title: "Configuration",
-    href: "/docs#configuration",
+    id: "configuration",
     icon: Settings,
   },
   {
     title: "Rules",
-    href: "/docs#rules",
+    id: "rules",
     icon: List,
   },
 ];
 
 const DocsSidebar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const [activeSection, setActiveSection] = useState("introduction");
+
+  // Handle Scroll Spy
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      {
+        // Trigger when the element is near the top of the viewport
+        // -20% from top, -35% from bottom creates a "sweet spot"
+        rootMargin: "-20% 0px -35% 0px",
+        threshold: 0,
+      }
+    );
+
+    const sections = sidebarItems.map((item) => document.getElementById(item.id));
+    
+    sections.forEach((section) => {
+      if (section) observer.observe(section);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  // Handle hash change on initial load or browser navigation
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace("#", "");
+      if (sidebarItems.some(item => item.id === id)) {
+        setActiveSection(id);
+        // Scroll to element if not already there (helper for initial load)
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      }
+    }
+  }, [location.hash]);
+
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
+    setActiveSection(id);
+    navigate(`/docs#${id}`, { replace: true });
+    
+    const element = document.getElementById(id);
+    if (element) {
+      // Offset for fixed header if needed, but scroll-mt-20 class on section usually handles it
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
     <aside className="w-64 shrink-0 border-r border-white/5 hidden lg:block backdrop-blur-sm bg-[#08080a]/50">
       <div className="sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto py-8 px-4">
         <nav className="space-y-1">
           {sidebarItems.map((item) => {
-            const isHashLink = item.href.includes('#');
-            
-            // Calculate active state manually
-            let isActive = false;
-            if (isHashLink) {
-              const [path, hash] = item.href.split('#');
-              // Check if path matches
-              if (location.pathname === path) {
-                // Check if hash matches, or if hash is empty and it's the introduction (first item/default)
-                if (location.hash === `#${hash}`) {
-                  isActive = true;
-                } else if (location.hash === "" && hash === "introduction") {
-                   isActive = true;
-                }
-              }
-            } else {
-              isActive = location.pathname === item.href; 
-            }
-
-            const activeClass = "bg-white/5 text-foreground shadow-[inset_0_0_20px_rgba(255,255,255,0.02)]";
+            const isActive = activeSection === item.id;
 
             return (
-              <NavLink
-                key={item.href}
-                to={item.href}
-                // Disable automatic active styling for hash links to prevent all being active
-                activeClassName={isHashLink ? "" : activeClass}
-                // Apply manual active styling
+              <a
+                key={item.id}
+                href={`#${item.id}`}
+                onClick={(e) => handleLinkClick(e, item.id)}
                 className={cn(
-                  "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-muted-foreground transition-all duration-200 hover:text-white hover:bg-white/5 group relative",
-                  isActive && isHashLink && activeClass
+                  "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group relative cursor-pointer",
+                  isActive 
+                    ? "bg-white/5 text-foreground shadow-[inset_0_0_20px_rgba(255,255,255,0.02)]" 
+                    : "text-muted-foreground hover:text-white hover:bg-white/5"
                 )}
               >
-                {({ isActive: routeIsActive }) => {
-                   // Use our manual isActive for hash links, fallback to router for others
-                   const finalIsActive = isHashLink ? isActive : routeIsActive;
-                   
-                   return (
-                    <>
-                      {finalIsActive && (
-                        <div className="absolute left-0 w-1 h-4 bg-gradient-to-b from-primary to-accent rounded-r-full" />
-                      )}
-                      <item.icon className={cn("h-4 w-4 transition-colors", finalIsActive ? "text-primary" : "group-hover:text-white")} />
-                      <span className={cn("transition-colors", finalIsActive ? "gradient-text font-bold" : "")}>
-                        {item.title}
-                      </span>
-                    </>
-                  );
-                }}
-              </NavLink>
+                {isActive && (
+                  <div className="absolute left-0 w-1 h-4 bg-gradient-to-b from-primary to-accent rounded-r-full" />
+                )}
+                <item.icon 
+                  className={cn(
+                    "h-4 w-4 transition-colors", 
+                    isActive ? "text-primary" : "group-hover:text-white"
+                  )} 
+                />
+                <span className={cn("transition-colors", isActive ? "gradient-text font-bold" : "")}>
+                  {item.title}
+                </span>
+              </a>
             );
           })}
         </nav>
