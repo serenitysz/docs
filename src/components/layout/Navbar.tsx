@@ -15,7 +15,7 @@ const Navbar = () => {
         <nav className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
-            <img src={serenityLogo} alt="Serenity" className="w-8 h-8 rounded" />
+            <img src={serenityLogo} alt="Serenity" className="w-10 h-10 rounded object-contain" />
             <span className="font-bold text-xl">Serenity</span>
           </Link>
 

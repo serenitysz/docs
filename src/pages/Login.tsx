@@ -39,7 +39,7 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center bg-[#08080a] p-4">
       <div className="w-full max-w-md space-y-8 bg-white/5 p-8 rounded-2xl border border-white/10 backdrop-blur-xl">
         <div className="flex flex-col items-center justify-center text-center">
-          <img src={serenityLogo} alt="Serenity" className="w-16 h-16 mb-4" />
+          <img src={serenityLogo} alt="Serenity" className="w-16 h-16 mb-4 object-contain" />
           <h2 className="text-2xl font-bold text-foreground">Admin Access</h2>
           <p className="text-muted-foreground text-sm mt-2">
             Enter your credentials to manage the waitlist.

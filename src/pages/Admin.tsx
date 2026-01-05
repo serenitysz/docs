@@ -97,7 +97,7 @@ const Admin = () => {
       <header className="border-b border-white/10 bg-black/20 backdrop-blur-lg sticky top-0 z-10">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img src={serenityLogo} alt="Serenity" className="w-8 h-8 rounded" />
+            <img src={serenityLogo} alt="Serenity" className="w-8 h-8 rounded object-contain" />
             <h1 className="font-bold text-lg">Waitlist Admin</h1>
           </div>
           <div className="flex items-center gap-2">

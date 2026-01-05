@@ -8,7 +8,7 @@ const Footer = () => {
       <div className="container px-4">
         <div className="flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex items-center gap-3">
-            <img src={serenityLogo} alt="Serenity" className="w-8 h-8 rounded" />
+            <img src={serenityLogo} alt="Serenity" className="w-8 h-8 rounded object-contain" />
             <span className="font-semibold text-lg">Serenity</span>
           </div>
 

@@ -103,8 +103,11 @@ const Features = () => {
     
       const codeString = codeLines.join('\n');
   return (
-    <section id="features-section" className="py-24 bg-background">
-      <div className="container px-4">
+    <section id="features-section" className="py-24 bg-[#08080a] relative overflow-hidden">
+      {/* Smooth transition from hero */}
+      <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-[#08080a] to-transparent z-10" />
+      
+      <div className="container px-4 relative z-20">
         <div className="grid lg:grid-cols-2 gap-16 items-stretch max-w-7xl mx-auto">
           {/* Left side - Content */}
           <div className="flex flex-col justify-center space-y-12">
