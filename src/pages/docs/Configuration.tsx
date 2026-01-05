@@ -3,8 +3,6 @@ import CodeBlock from "@/components/docs/CodeBlock";
 const Configuration = () => {
   return (
     <article className="prose prose-invert max-w-none">
-      <h1 className="text-4xl font-bold mb-4 gradient-text">Configuration</h1>
-      
       <p className="text-lg text-muted-foreground leading-relaxed mb-8">
         Customize Serenity's behavior with a simple JSON configuration file.
       </p>
@@ -12,13 +10,13 @@ const Configuration = () => {
       <h2 className="text-2xl font-semibold mt-12 mb-4">Configuration File</h2>
 
       <p className="text-muted-foreground mb-4">
-        Serenity looks for <code className="text-accent bg-muted px-1.5 py-0.5 rounded">serenity.json</code> in 
+        Serenity looks for <code className="text-accent bg-muted px-1.5 py-0.5 rounded">serenity.json</code> in
         your project root. You can also specify a custom path using the <code className="text-accent bg-muted px-1.5 py-0.5 rounded">--config</code> flag.
       </p>
 
       <h2 className="text-2xl font-semibold mt-12 mb-4">Full Example</h2>
 
-      <CodeBlock 
+      <CodeBlock
         code={`{
   "rules": {
     "error-check": "error",
@@ -118,9 +116,9 @@ const Configuration = () => {
         <div>
           <h3 className="text-xl font-semibold mb-3 text-foreground">format</h3>
           <p className="text-muted-foreground">
-            Output format: <code className="text-accent bg-muted px-1 rounded">text</code>, 
-            <code className="text-accent bg-muted px-1 rounded ml-1">json</code>, 
-            <code className="text-accent bg-muted px-1 rounded ml-1">sarif</code>, or 
+            Output format: <code className="text-accent bg-muted px-1 rounded">text</code>,
+            <code className="text-accent bg-muted px-1 rounded ml-1">json</code>,
+            <code className="text-accent bg-muted px-1 rounded ml-1">sarif</code>, or
             <code className="text-accent bg-muted px-1 rounded ml-1">github</code>.
           </p>
         </div>
