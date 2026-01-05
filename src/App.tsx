@@ -7,10 +7,6 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import DocsLayout from "./components/docs/DocsLayout";
 import Introduction from "./pages/docs/Introduction";
-import GettingStarted from "./pages/docs/GettingStarted";
-import CLIReference from "./pages/docs/CLIReference";
-import Configuration from "./pages/docs/Configuration";
-import Rules from "./pages/docs/Rules";
 import Login from "./pages/Login";
 import Admin from "./pages/Admin";
 
@@ -28,10 +24,6 @@ const App = () => (
           <Route path="/admin" element={<Admin />} />
           <Route path="/docs" element={<DocsLayout />}>
             <Route index element={<Introduction />} />
-            <Route path="getting-started" element={<GettingStarted />} />
-            <Route path="cli" element={<CLIReference />} />
-            <Route path="configuration" element={<Configuration />} />
-            <Route path="rules" element={<Rules />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

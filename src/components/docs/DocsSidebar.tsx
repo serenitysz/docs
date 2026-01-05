@@ -11,12 +11,12 @@ const sidebarItems = [
   },
   {
     title: "Getting Started",
-    href: "/docs/getting-started",
+    href: "/docs#getting-started",
     icon: Rocket,
   },
   {
     title: "CLI Reference",
-    href: "/docs/cli",
+    href: "/docs#cli",
     icon: Terminal,
   },
   {
@@ -55,8 +55,6 @@ const DocsSidebar = () => {
                 }
               }
             } else {
-              // Standard path matching for non-hash links
-              // Exact match or sub-path match handling (simple version)
               isActive = location.pathname === item.href; 
             }
 
