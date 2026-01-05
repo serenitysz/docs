@@ -1,164 +1,359 @@
-import { Badge } from "@/components/ui/badge";
-
-const rules = [
-  {
-    name: "error-check",
-    description: "Ensure all errors are properly checked and handled",
-    severity: "error",
-    group: "recommended",
-    autofix: false,
-  },
-  {
-    name: "unused-param",
-    description: "Detect unused function parameters",
-    severity: "warn",
-    group: "recommended",
-    autofix: true,
-  },
-  {
-    name: "shadow-var",
-    description: "Detect variable shadowing in nested scopes",
-    severity: "warn",
-    group: "best-practices",
-    autofix: false,
-  },
-  {
-    name: "nil-check",
-    description: "Ensure nil checks before pointer dereference",
-    severity: "error",
-    group: "recommended",
-    autofix: false,
-  },
-  {
-    name: "context-first",
-    description: "Context should be the first parameter in functions",
-    severity: "warn",
-    group: "best-practices",
-    autofix: true,
-  },
-  {
-    name: "error-strings",
-    description: "Error strings should not be capitalized or end with punctuation",
-    severity: "info",
-    group: "best-practices",
-    autofix: true,
-  },
-  {
-    name: "receiver-naming",
-    description: "Receiver names should be consistent and short",
-    severity: "info",
-    group: "best-practices",
-    autofix: true,
-  },
-  {
-    name: "defer-loop",
-    description: "Detect defer statements inside loops",
-    severity: "error",
-    group: "performance",
-    autofix: false,
-  },
-  {
-    name: "mutex-lock",
-    description: "Ensure mutex locks are properly unlocked",
-    severity: "error",
-    group: "recommended",
-    autofix: false,
-  },
-  {
-    name: "sql-injection",
-    description: "Detect potential SQL injection vulnerabilities",
-    severity: "error",
-    group: "security",
-    autofix: false,
-  },
-];
-
-const getSeverityColor = (severity: string) => {
-  switch (severity) {
-    case "error":
-      return "bg-destructive/20 text-destructive border-destructive/30";
-    case "warn":
-      return "bg-primary/20 text-primary border-primary/30";
-    case "info":
-      return "bg-secondary/20 text-secondary border-secondary/30";
-    default:
-      return "";
-  }
-};
-
-const getGroupColor = (group: string) => {
-  switch (group) {
-    case "recommended":
-      return "bg-accent/20 text-accent border-accent/30";
-    case "best-practices":
-      return "bg-primary/20 text-primary border-primary/30";
-    case "performance":
-      return "bg-secondary/20 text-secondary border-secondary/30";
-    case "security":
-      return "bg-destructive/20 text-destructive border-destructive/30";
-    default:
-      return "";
-  }
-};
+import CodeBlock from "@/components/docs/CodeBlock";
+import ConfigExample from "@/components/docs/ConfigExample";
 
 const Rules = () => {
   return (
     <article className="prose prose-invert max-w-none">
-      <h1 className="text-4xl font-bold mb-4 gradient-text">Rules</h1>
+      <h1 className="text-4xl font-bold mb-4 gradient-text">Rules & Configuration</h1>
       
       <p className="text-lg text-muted-foreground leading-relaxed mb-8">
-        Comprehensive list of all Serenity rules. Each rule can be configured 
-        individually via the configuration file.
+        Serenity comes with a comprehensive set of rules to help you write better Go code.
+        All rules are configurable and can be enabled or disabled individually.
       </p>
 
-      <div className="space-y-4">
-        {rules.map((rule) => (
-          <div
-            key={rule.name}
-            className="glow-border rounded-lg p-5 bg-card/30 hover:bg-card/50 transition-colors"
-          >
-            <div className="flex flex-wrap items-start justify-between gap-3 mb-3">
-              <code className="text-lg font-mono text-foreground">{rule.name}</code>
-              <div className="flex flex-wrap gap-2">
-                <Badge variant="outline" className={getSeverityColor(rule.severity)}>
-                  {rule.severity}
-                </Badge>
-                <Badge variant="outline" className={getGroupColor(rule.group)}>
-                  {rule.group}
-                </Badge>
-                {rule.autofix && (
-                  <Badge variant="outline" className="bg-accent/10 text-accent border-accent/30">
-                    autofix
-                  </Badge>
-                )}
-              </div>
-            </div>
-            <p className="text-muted-foreground mb-0">{rule.description}</p>
-          </div>
-        ))}
-      </div>
+      <h2 className="text-2xl font-semibold mt-12 mb-4">Usage</h2>
+      <p className="text-muted-foreground mb-4">
+        To run Serenity on your project, use the <code>check</code> command. The default path is the current directory (<code>.</code>).
+      </p>
+      <CodeBlock code="serenity check ." language="bash" />
+      <p className="text-muted-foreground mb-4">
+        You can also specify a specific path:
+      </p>
+      <CodeBlock code="serenity check ./cmd/..." language="bash" />
 
-      <div className="mt-12 p-6 glow-border rounded-lg bg-card/30">
-        <h3 className="text-lg font-semibold text-foreground mb-2">Legend</h3>
-        <div className="grid grid-cols-2 gap-4 text-sm text-muted-foreground">
-          <div>
-            <strong className="text-foreground">Severity:</strong>
-            <ul className="mt-2 space-y-1">
-              <li><span className="text-destructive">error</span> — causes non-zero exit</li>
-              <li><span className="text-primary">warn</span> — informational warning</li>
-              <li><span className="text-secondary">info</span> — suggestion only</li>
-            </ul>
+      <h2 className="text-2xl font-semibold mt-12 mb-4">Configuration</h2>
+      <p className="text-muted-foreground mb-4">
+        Serenity is highly configurable. You can define your rules in a configuration file.
+        Below is a real-world example of how to configure the linter rules in different formats.
+      </p>
+      
+      <ConfigExample />
+
+      <hr className="border-white/10 my-12" />
+
+      <h2 className="text-3xl font-bold mb-8">Rule Groups</h2>
+
+      <div className="space-y-16">
+        {/* Error Handling */}
+        <section>
+          <h3 className="text-2xl font-semibold mb-6 text-foreground">Error Handling</h3>
+          <p className="text-muted-foreground mb-6">
+            Rules related to proper error handling and reporting.
+          </p>
+          
+          <div className="space-y-8">
+            <div className="glow-border rounded-lg p-6 bg-card/30">
+              <h4 className="text-xl font-medium text-accent mb-2">no-error-shadowing</h4>
+              <p className="text-muted-foreground mb-4">
+                Avoid shadowing the built-in <code>error</code> type or variables named <code>error</code>.
+              </p>
+              <CodeBlock 
+                code={`// Bad
+func main() {
+    error := doSomething() // Shadows built-in error type if named 'error' incorrectly in scopes
+    // ...
+}
+
+// Good
+func main() {
+    err := doSomething()
+    if err != nil {
+        // ...
+    }
+}`} 
+                language="go" 
+              />
+            </div>
+
+            <div className="glow-border rounded-lg p-6 bg-card/30">
+              <h4 className="text-xl font-medium text-accent mb-2">error-string-format</h4>
+              <p className="text-muted-foreground mb-4">
+                Error strings should not be capitalized (unless beginning with proper nouns or acronyms) or end with punctuation.
+              </p>
+              <CodeBlock 
+                code={`// Bad
+errors.New("Something went wrong.")
+
+// Good
+errors.New("something went wrong")`} 
+                language="go" 
+              />
+            </div>
+
+            <div className="glow-border rounded-lg p-6 bg-card/30">
+              <h4 className="text-xl font-medium text-accent mb-2">error-not-wrapped</h4>
+              <p className="text-muted-foreground mb-4">
+                Errors returned from external packages should be wrapped to provide context.
+              </p>
+              <CodeBlock 
+                code={`// Bad
+func GetData() error {
+    if err := db.Query(); err != nil {
+        return err
+    }
+    return nil
+}
+
+// Good
+func GetData() error {
+    if err := db.Query(); err != nil {
+        return fmt.Errorf("failed to query data: %w", err)
+    }
+    return nil
+}`} 
+                language="go" 
+              />
+            </div>
           </div>
-          <div>
-            <strong className="text-foreground">Groups:</strong>
-            <ul className="mt-2 space-y-1">
-              <li><span className="text-accent">recommended</span> — essential rules</li>
-              <li><span className="text-primary">best-practices</span> — idiomatic Go</li>
-              <li><span className="text-secondary">performance</span> — optimization</li>
-              <li><span className="text-destructive">security</span> — vulnerability detection</li>
-            </ul>
+        </section>
+
+        {/* Imports */}
+        <section>
+          <h3 className="text-2xl font-semibold mb-6 text-foreground">Imports</h3>
+          <p className="text-muted-foreground mb-6">
+            Rules to ensure clean and safe package imports.
+          </p>
+
+          <div className="space-y-8">
+            <div className="glow-border rounded-lg p-6 bg-card/30">
+              <h4 className="text-xl font-medium text-accent mb-2">no-dot-imports</h4>
+              <p className="text-muted-foreground mb-4">
+                Avoid dot imports to prevent namespace pollution and ambiguity.
+              </p>
+              <CodeBlock 
+                code={`// Bad
+import . "fmt"
+
+// Good
+import "fmt"`} 
+                language="go" 
+              />
+            </div>
+
+            <div className="glow-border rounded-lg p-6 bg-card/30">
+              <h4 className="text-xl font-medium text-accent mb-2">disallowed-packages</h4>
+              <p className="text-muted-foreground mb-4">
+                Prevent usage of specific packages (e.g., <code>reflect</code>, <code>unsafe</code>) as configured.
+              </p>
+              <CodeBlock 
+                code={`// If "reflect" is in disallowedPackages:
+
+// Bad
+import "reflect"
+
+// Good
+// Use type assertions or other safe methods instead`} 
+                language="go" 
+              />
+            </div>
           </div>
-        </div>
+        </section>
+
+        {/* Best Practices */}
+        <section>
+          <h3 className="text-2xl font-semibold mb-6 text-foreground">Best Practices</h3>
+          <p className="text-muted-foreground mb-6">
+            Idiomatic Go patterns and code quality improvements.
+          </p>
+
+          <div className="space-y-8">
+            <div className="glow-border rounded-lg p-6 bg-card/30">
+              <h4 className="text-xl font-medium text-accent mb-2">no-defer-in-loop</h4>
+              <p className="text-muted-foreground mb-4">
+                Deferring statements inside a loop can cause memory leaks because they are only executed when the function exits.
+              </p>
+              <CodeBlock 
+                code={`// Bad
+for _, file := range files {
+    f, _ := os.Open(file)
+    defer f.Close() // Stacks up until function returns
+}
+
+// Good
+for _, file := range files {
+    func() {
+        f, _ := os.Open(file)
+        defer f.Close()
+        // ...
+    }()
+}`} 
+                language="go" 
+              />
+            </div>
+
+            <div className="glow-border rounded-lg p-6 bg-card/30">
+              <h4 className="text-xl font-medium text-accent mb-2">context-first-param</h4>
+              <p className="text-muted-foreground mb-4">
+                <code>context.Context</code> should always be the first parameter of a function.
+              </p>
+              <CodeBlock 
+                code={`// Bad
+func FetchData(id string, ctx context.Context) error { ... }
+
+// Good
+func FetchData(ctx context.Context, id string) error { ... }`} 
+                language="go" 
+              />
+            </div>
+
+            <div className="glow-border rounded-lg p-6 bg-card/30">
+              <h4 className="text-xl font-medium text-accent mb-2">no-magic-numbers</h4>
+              <p className="text-muted-foreground mb-4">
+                Avoid magic numbers; use named constants instead for better readability and maintainability.
+              </p>
+              <CodeBlock 
+                code={`// Bad
+time.Sleep(86400 * time.Second)
+
+// Good
+const SecondsInDay = 86400
+time.Sleep(SecondsInDay * time.Second)`} 
+                language="go" 
+              />
+            </div>
+
+            <div className="glow-border rounded-lg p-6 bg-card/30">
+              <h4 className="text-xl font-medium text-accent mb-2">use-slice-capacity</h4>
+              <p className="text-muted-foreground mb-4">
+                Specify capacity when allocating slices with <code>make</code> if the length is known, to avoid reallocations.
+              </p>
+              <CodeBlock 
+                code={`// Bad
+data := make([]int, 0)
+for i := 0; i < 100; i++ {
+    data = append(data, i)
+}
+
+// Good
+data := make([]int, 0, 100)
+for i := 0; i < 100; i++ {
+    data = append(data, i)
+}`} 
+                language="go" 
+              />
+            </div>
+
+             <div className="glow-border rounded-lg p-6 bg-card/30">
+              <h4 className="text-xl font-medium text-accent mb-2">always-prefer-const</h4>
+              <p className="text-muted-foreground mb-4">
+                Prefer <code>const</code> over <code>var</code> for values that do not change.
+              </p>
+              <CodeBlock 
+                code={`// Bad
+var Pi = 3.14
+
+// Good
+const Pi = 3.14`} 
+                language="go" 
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* Correctness */}
+        <section>
+          <h3 className="text-2xl font-semibold mb-6 text-foreground">Correctness</h3>
+          <p className="text-muted-foreground mb-6">
+            Detects potential bugs and incorrect code.
+          </p>
+
+          <div className="space-y-8">
+            <div className="glow-border rounded-lg p-6 bg-card/30">
+              <h4 className="text-xl font-medium text-accent mb-2">empty-block</h4>
+              <p className="text-muted-foreground mb-4">
+                Detects empty code blocks which might indicate unfinished logic.
+              </p>
+              <CodeBlock 
+                code={`// Bad
+if user.IsActive {
+    // missing logic
+}
+
+// Good
+if user.IsActive {
+    processUser(user)
+}`} 
+                language="go" 
+              />
+            </div>
+
+            <div className="glow-border rounded-lg p-6 bg-card/30">
+              <h4 className="text-xl font-medium text-accent mb-2">unused-receiver</h4>
+              <p className="text-muted-foreground mb-4">
+                Detects method receivers that are not used inside the method body.
+              </p>
+              <CodeBlock 
+                code={`// Bad
+func (u *User) GetStaticID() int {
+    return 42
+}
+
+// Good
+func (u *User) GetStaticID() int {
+    _ = u // explicit ignore or remove receiver name
+    return 42
+}`} 
+                language="go" 
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* Complexity */}
+        <section>
+          <h3 className="text-2xl font-semibold mb-6 text-foreground">Complexity</h3>
+          <p className="text-muted-foreground mb-6">
+            Rules to keep code simple and maintainable.
+          </p>
+
+          <div className="space-y-8">
+            <div className="glow-border rounded-lg p-6 bg-card/30">
+              <h4 className="text-xl font-medium text-accent mb-2">max-func-lines</h4>
+              <p className="text-muted-foreground mb-4">
+                Limits the number of lines in a function (default: 20).
+              </p>
+            </div>
+
+            <div className="glow-border rounded-lg p-6 bg-card/30">
+              <h4 className="text-xl font-medium text-accent mb-2">max-nesting-depth</h4>
+              <p className="text-muted-foreground mb-4">
+                Limits the nesting depth of blocks (e.g. loops inside loops inside ifs).
+              </p>
+            </div>
+            
+             <div className="glow-border rounded-lg p-6 bg-card/30">
+              <h4 className="text-xl font-medium text-accent mb-2">cyclomatic-complexity</h4>
+              <p className="text-muted-foreground mb-4">
+                Limits the cyclomatic complexity of functions (number of execution paths).
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Naming */}
+        <section>
+          <h3 className="text-2xl font-semibold mb-6 text-foreground">Naming</h3>
+          <p className="text-muted-foreground mb-6">
+            Enforces naming conventions.
+          </p>
+
+          <div className="space-y-8">
+             <div className="glow-border rounded-lg p-6 bg-card/30">
+              <h4 className="text-xl font-medium text-accent mb-2">receiver-names</h4>
+              <p className="text-muted-foreground mb-4">
+                Receiver names should be short and consistent.
+              </p>
+              <CodeBlock 
+                code={`// Bad
+func (service *UserService) Get() { ... }
+
+// Good
+func (s *UserService) Get() { ... }`} 
+                language="go" 
+              />
+            </div>
+          </div>
+        </section>
       </div>
     </article>
   );
