@@ -54,6 +54,54 @@ const ConfigGenerator = () => {
     fileHeader: false,
   });
 
+  const categories = [
+    {
+      name: "Errors",
+      rules: ["noErrorShadowing", "errorStringFormat", "errorNotWrapped"],
+    },
+    {
+      name: "Imports",
+      rules: ["redundantImportAlias"],
+    },
+    {
+      name: "Best Practices",
+      rules: [
+        "noMagicNumbers",
+        "maxParams",
+        "useContextInFirstParam",
+        "noDeferInLoop",
+        "useSliceCapacity",
+        "alwaysPreferConst",
+        "simplifyBooleanReturn",
+        "getMustReturnValue",
+        "preferEarlyReturn",
+        "redundantErrorCheck",
+      ],
+    },
+    {
+      name: "Correctness",
+      rules: ["boolLiteralExpressions", "ambiguousReturns"],
+    },
+    {
+      name: "Complexity",
+      rules: ["maxFuncLines", "cyclomaticComplexity"],
+    },
+    {
+      name: "Naming",
+      rules: ["receiverNames", "bannedChars"],
+    },
+    {
+      name: "Style",
+      rules: [
+        "preferIncDec",
+        "maxLineLength",
+        "packageComments",
+        "commentSpacing",
+        "fileHeader",
+      ],
+    },
+  ];
+
   useEffect(() => {
     const config = generateConfig();
     setGeneratedConfig(config);
@@ -252,22 +300,31 @@ const ConfigGenerator = () => {
                 <Switch checked={autoFix} onCheckedChange={setAutoFix} />
               </div>
               
-              <div className="space-y-3">
+              <div className="space-y-6">
                 <Label className="text-sm font-semibold text-foreground">Active Rules</Label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pr-2">
-                  {Object.keys(rules).map((rule) => (
-                    <div key={rule} className="flex items-center space-x-2 p-2 rounded-md hover:bg-white/5 transition-colors">
-                      <Checkbox 
-                        id={rule} 
-                        checked={rules[rule as keyof typeof rules]} 
-                        onCheckedChange={() => toggleRule(rule as keyof typeof rules)}
-                      />
-                      <label 
-                        htmlFor={rule} 
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer text-muted-foreground"
-                      >
-                        {rule}
-                      </label>
+                <div className="space-y-6 max-h-[400px] overflow-y-auto pr-4 custom-scrollbar">
+                  {categories.map((category) => (
+                    <div key={category.name} className="space-y-3">
+                      <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground/70 border-b border-white/5 pb-1">
+                        {category.name}
+                      </h4>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        {category.rules.map((rule) => (
+                          <div key={rule} className="flex items-center space-x-2 p-2 rounded-md hover:bg-white/5 transition-colors">
+                            <Checkbox 
+                              id={rule} 
+                              checked={rules[rule as keyof typeof rules]} 
+                              onCheckedChange={() => toggleRule(rule as keyof typeof rules)}
+                            />
+                            <label 
+                              htmlFor={rule} 
+                              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer text-muted-foreground"
+                            >
+                              {rule}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   ))}
                 </div>

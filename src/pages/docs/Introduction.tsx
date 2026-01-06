@@ -12,14 +12,14 @@ const Introduction = () => {
         </p>
 
         <h3 className="text-xl font-semibold mt-8 mb-4">Installation</h3>
-        
+
         <p className="text-muted-foreground mb-4">
           Install Serenity using Go's built-in package manager:
         </p>
 
-        <CodeBlock 
-          code="go install github.com/serenitysz/serenity@latest" 
-          language="bash" 
+        <CodeBlock
+          code="go install github.com/serenitysz/serenity@latest"
+          language="bash"
         />
 
         <p className="text-muted-foreground mb-4">
@@ -57,7 +57,7 @@ const Introduction = () => {
           Add Serenity to your GitHub Actions workflow:
         </p>
 
-        <CodeBlock 
+        <CodeBlock
           code={`name: Serenity Lint
 
 on:
@@ -93,7 +93,7 @@ jobs:
 
       <section id="cli" className="scroll-mt-20">
         <h2 className="text-2xl font-semibold mt-12 mb-4">CLI Reference</h2>
-        
+
         <p className="text-lg text-muted-foreground leading-relaxed mb-8">
           Complete reference for all Serenity command-line options.
         </p>
@@ -108,16 +108,16 @@ jobs:
           <div className="glow-border rounded-lg p-4 bg-card/30">
             <code className="text-accent font-mono">--config, -c &lt;path&gt;</code>
             <p className="text-muted-foreground mt-2 mb-0">
-              Path to the configuration file. Supports <code className="text-foreground bg-muted px-1 rounded">.json</code>, 
-              <code className="text-foreground bg-muted px-1 rounded ml-1">.yaml</code>, 
-              <code className="text-foreground bg-muted px-1 rounded ml-1">.yml</code>, and 
-              <code className="text-foreground bg-muted px-1 rounded ml-1">.toml</code>. 
+              Path to the configuration file. Supports <code className="text-foreground bg-muted px-1 rounded">.json</code>,
+              <code className="text-foreground bg-muted px-1 rounded ml-1">.yaml</code>,
+              <code className="text-foreground bg-muted px-1 rounded ml-1">.yml</code>, and
+              <code className="text-foreground bg-muted px-1 rounded ml-1">.toml</code>.
               Default: <code className="text-foreground bg-muted px-1 rounded ml-1">serenity.json</code>
             </p>
           </div>
 
           <div className="glow-border rounded-lg p-4 bg-card/30">
-            <code className="text-accent font-mono">--fix</code>
+            <code className="text-accent font-mono">fix</code>
             <p className="text-muted-foreground mt-2 mb-0">
               Automatically fix issues where possible.
             </p>
@@ -126,9 +126,9 @@ jobs:
           <div className="glow-border rounded-lg p-4 bg-card/30">
             <code className="text-accent font-mono">--format, -f &lt;format&gt;</code>
             <p className="text-muted-foreground mt-2 mb-0">
-              Output format. Options: <code className="text-foreground bg-muted px-1 rounded">text</code>, 
-              <code className="text-foreground bg-muted px-1 rounded ml-1">json</code>, 
-              <code className="text-foreground bg-muted px-1 rounded ml-1">sarif</code>, 
+              Output format. Options: <code className="text-foreground bg-muted px-1 rounded">text</code>,
+              <code className="text-foreground bg-muted px-1 rounded ml-1">json</code>,
+              <code className="text-foreground bg-muted px-1 rounded ml-1">sarif</code>,
               <code className="text-foreground bg-muted px-1 rounded ml-1">github</code>
             </p>
           </div>
@@ -136,21 +136,21 @@ jobs:
           <div className="glow-border rounded-lg p-4 bg-card/30">
             <code className="text-accent font-mono">--severity &lt;level&gt;</code>
             <p className="text-muted-foreground mt-2 mb-0">
-              Minimum severity to report. Options: <code className="text-foreground bg-muted px-1 rounded">error</code>, 
-              <code className="text-foreground bg-muted px-1 rounded ml-1">warn</code>, 
+              Minimum severity to report. Options: <code className="text-foreground bg-muted px-1 rounded">error</code>,
+              <code className="text-foreground bg-muted px-1 rounded ml-1">warn</code>,
               <code className="text-foreground bg-muted px-1 rounded ml-1">info</code>
             </p>
           </div>
 
           <div className="glow-border rounded-lg p-4 bg-card/30">
-            <code className="text-accent font-mono">--enable &lt;rules&gt;</code>
+            <code className="text-accent font-mono">enable &lt;rules&gt;</code>
             <p className="text-muted-foreground mt-2 mb-0">
               Comma-separated list of rules to enable.
             </p>
           </div>
 
           <div className="glow-border rounded-lg p-4 bg-card/30">
-            <code className="text-accent font-mono">--disable &lt;rules&gt;</code>
+            <code className="text-accent font-mono">disable &lt;rules&gt;</code>
             <p className="text-muted-foreground mt-2 mb-0">
               Comma-separated list of rules to disable.
             </p>
@@ -223,14 +223,14 @@ jobs:
             <p className="text-muted-foreground mb-6">
               Rules related to proper error handling and reporting.
             </p>
-            
+
             <div className="space-y-8">
               <div className="glow-border rounded-lg p-6 bg-card/30">
                 <h4 className="text-xl font-medium text-accent mb-2">no-error-shadowing</h4>
                 <p className="text-muted-foreground mb-4">
                   Avoid shadowing the built-in <code>error</code> type or variables named <code>error</code>.
                 </p>
-                <FixableCodeBlock 
+                <FixableCodeBlock
                   badCode={`func main() {
     error := doSomething() // Shadows built-in error type
     // ...
@@ -249,7 +249,7 @@ jobs:
                 <p className="text-muted-foreground mb-4">
                   Error strings should not be capitalized (unless beginning with proper nouns or acronyms) or end with punctuation.
                 </p>
-                <FixableCodeBlock 
+                <FixableCodeBlock
                   badCode={`errors.New("Something went wrong.")`}
                   goodCode={`errors.New("something went wrong")`}
                 />
@@ -260,7 +260,7 @@ jobs:
                 <p className="text-muted-foreground mb-4">
                   Errors returned from external packages should be wrapped to provide context.
                 </p>
-                <FixableCodeBlock 
+                <FixableCodeBlock
                   badCode={`func GetData() error {
     if err := db.Query(); err != nil {
         return err
@@ -278,7 +278,6 @@ jobs:
             </div>
           </section>
 
-          {/* Imports */}
           <section>
             <h3 className="text-2xl font-semibold mb-6 text-foreground">Imports</h3>
             <p className="text-muted-foreground mb-6">
@@ -291,7 +290,7 @@ jobs:
                 <p className="text-muted-foreground mb-4">
                   Avoid dot imports to prevent namespace pollution and ambiguity.
                 </p>
-                <FixableCodeBlock 
+                <FixableCodeBlock
                   badCode={`import . "fmt"`}
                   goodCode={`import "fmt"`}
                 />
@@ -300,17 +299,22 @@ jobs:
               <div className="glow-border rounded-lg p-6 bg-card/30">
                 <h4 className="text-xl font-medium text-accent mb-2">disallowed-packages</h4>
                 <p className="text-muted-foreground mb-4">
-                  Prevent usage of specific packages (e.g., <code>reflect</code>, <code>unsafe</code>) as configured.
+                  Prevent usage of specific packages (e.g., <code>reflect</code>, <code>unsafe</code>) as configured in your <code>serenity.json</code>.
                 </p>
-                <CodeBlock 
-                  code={`// If "reflect" is in disallowedPackages:
+                <FixableCodeBlock
+                  badCode={`import "reflect"
 
-// Bad
-import "reflect"
-
-// Good
-// Use type assertions or other safe methods instead`} 
-                  language="go" 
+func main() {
+    v := reflect.ValueOf(42)
+    fmt.Println(v)
+}`}
+                  goodCode={`// Use type assertions or other safe methods
+func main() {
+    var i any = 42
+    if v, ok := i.(int); ok {
+        fmt.Println(v)
+    }
+}`}
                 />
               </div>
             </div>
@@ -329,7 +333,7 @@ import "reflect"
                 <p className="text-muted-foreground mb-4">
                   Deferring statements inside a loop can cause memory leaks because they are only executed when the function exits.
                 </p>
-                <FixableCodeBlock 
+                <FixableCodeBlock
                   badCode={`for _, file := range files {
     f, _ := os.Open(file)
     defer f.Close() // Stacks up until function returns
@@ -349,7 +353,7 @@ import "reflect"
                 <p className="text-muted-foreground mb-4">
                   <code>context.Context</code> should always be the first parameter of a function.
                 </p>
-                <FixableCodeBlock 
+                <FixableCodeBlock
                   badCode={`func FetchData(id string, ctx context.Context) error { ... }`}
                   goodCode={`func FetchData(ctx context.Context, id string) error { ... }`}
                 />
@@ -360,7 +364,7 @@ import "reflect"
                 <p className="text-muted-foreground mb-4">
                   Avoid magic numbers; use named constants instead for better readability and maintainability.
                 </p>
-                <FixableCodeBlock 
+                <FixableCodeBlock
                   badCode={`time.Sleep(86400 * time.Second)`}
                   goodCode={`const SecondsInDay = 86400
 time.Sleep(SecondsInDay * time.Second)`}
@@ -372,7 +376,7 @@ time.Sleep(SecondsInDay * time.Second)`}
                 <p className="text-muted-foreground mb-4">
                   Specify capacity when allocating slices with <code>make</code> if the length is known, to avoid reallocations.
                 </p>
-                <FixableCodeBlock 
+                <FixableCodeBlock
                   badCode={`data := make([]int, 0)
 for i := 0; i < 100; i++ {
     data = append(data, i)
@@ -389,7 +393,7 @@ for i := 0; i < 100; i++ {
                 <p className="text-muted-foreground mb-4">
                   Prefer <code>const</code> over <code>var</code> for values that do not change.
                 </p>
-                <FixableCodeBlock 
+                <FixableCodeBlock
                   badCode={`var Pi = 3.14`}
                   goodCode={`const Pi = 3.14`}
                 />
@@ -410,7 +414,7 @@ for i := 0; i < 100; i++ {
                 <p className="text-muted-foreground mb-4">
                   Detects empty code blocks which might indicate unfinished logic.
                 </p>
-                <FixableCodeBlock 
+                <FixableCodeBlock
                   badCode={`if user.IsActive {
     // missing logic
 }`}
@@ -425,7 +429,7 @@ for i := 0; i < 100; i++ {
                 <p className="text-muted-foreground mb-4">
                   Detects method receivers that are not used inside the method body.
                 </p>
-                <FixableCodeBlock 
+                <FixableCodeBlock
                   badCode={`func (u *User) GetStaticID() int {
     return 42
 }`}
@@ -459,7 +463,7 @@ for i := 0; i < 100; i++ {
                   Limits the nesting depth of blocks (e.g. loops inside loops inside ifs).
                 </p>
               </div>
-              
+
               <div className="glow-border rounded-lg p-6 bg-card/30">
                 <h4 className="text-xl font-medium text-accent mb-2">cyclomatic-complexity</h4>
                 <p className="text-muted-foreground mb-4">
@@ -482,7 +486,7 @@ for i := 0; i < 100; i++ {
                 <p className="text-muted-foreground mb-4">
                   Receiver names should be short and consistent.
                 </p>
-                <FixableCodeBlock 
+                <FixableCodeBlock
                   badCode={`func (service *UserService) Get() { ... }`}
                   goodCode={`func (s *UserService) Get() { ... }`}
                 />
@@ -503,7 +507,7 @@ for i := 0; i < 100; i++ {
                 <p className="text-muted-foreground mb-4">
                   Prefer <code>i++</code> and <code>i--</code> over <code>i += 1</code> and <code>i -= 1</code>.
                 </p>
-                <FixableCodeBlock 
+                <FixableCodeBlock
                   badCode={`i += 1`}
                   goodCode={`i++`}
                 />
@@ -528,7 +532,7 @@ for i := 0; i < 100; i++ {
                 <p className="text-muted-foreground mb-4">
                   Ensures there is a space between <code>//</code> and the comment text.
                 </p>
-                <FixableCodeBlock 
+                <FixableCodeBlock
                   badCode={`//Todo: fix this`}
                   goodCode={`// Todo: fix this`}
                 />
@@ -549,10 +553,10 @@ for i := 0; i < 100; i++ {
         <hr className="border-white/10 my-12" />
         <h2 className="text-2xl font-semibold mt-12 mb-4">Configuration</h2>
         <p className="text-muted-foreground mb-4">
-          Serenity is highly configurable. You can use <code>JSON</code>, <code>YAML</code>, <code>YML</code>, or <code>TOML</code> for your configuration. 
+          Serenity is highly configurable. You can use <code>JSON</code>, <code>YAML</code>, <code>YML</code>, or <code>TOML</code> for your configuration.
           Use the interactive generator below to create your <code>serenity</code> configuration file.
         </p>
-        
+
         <ConfigGenerator />
       </section>
 
