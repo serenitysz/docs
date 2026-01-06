@@ -10,8 +10,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import { ChevronsUpDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
-type Format = "json" | "yaml" | "toml";
+type Format = "json" | "yaml" | "yml" | "toml";
 type Strictness = "lenient" | "standard" | "strict";
 type ProjectType = "standard" | "library" | "api";
 
@@ -21,6 +24,7 @@ const ConfigGenerator = () => {
   const [projectType, setProjectType] = useState<ProjectType>("standard");
   const [autoFix, setAutoFix] = useState(false);
   const [generatedConfig, setGeneratedConfig] = useState("");
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const [rules, setRules] = useState({
     noErrorShadowing: true,
@@ -35,6 +39,19 @@ const ConfigGenerator = () => {
     maxFuncLines: true,
     cyclomaticComplexity: true,
     receiverNames: true,
+    redundantImportAlias: true,
+    simplifyBooleanReturn: true,
+    getMustReturnValue: true,
+    preferEarlyReturn: true,
+    redundantErrorCheck: true,
+    boolLiteralExpressions: true,
+    ambiguousReturns: true,
+    bannedChars: true,
+    preferIncDec: true,
+    maxLineLength: true,
+    packageComments: true,
+    commentSpacing: true,
+    fileHeader: false,
   });
 
   useEffect(() => {
@@ -50,9 +67,12 @@ const ConfigGenerator = () => {
         rules: {
           recommended: true,
           errors: {},
+          imports: {},
           bestPractices: {},
+          correctness: {},
           complexity: {},
           naming: {},
+          style: {},
         },
       },
     };
@@ -61,17 +81,33 @@ const ConfigGenerator = () => {
     if (rules.errorStringFormat) config.linter.rules.errors.errorStringFormat = { severity: "warn" };
     if (rules.errorNotWrapped) config.linter.rules.errors.errorNotWrapped = { severity: "error" };
     
+    if (rules.redundantImportAlias) config.linter.rules.imports.redundantImportAlias = { severity: "info" };
+
     if (rules.noMagicNumbers) config.linter.rules.bestPractices.noMagicNumbers = { severity: "warn" };
     if (rules.maxParams) config.linter.rules.bestPractices.maxParams = { max: 5 };
     if (rules.useContextInFirstParam) config.linter.rules.bestPractices.useContextInFirstParam = { severity: "error" };
     if (rules.noDeferInLoop) config.linter.rules.bestPractices.noDeferInLoop = { severity: "error" };
     if (rules.useSliceCapacity) config.linter.rules.bestPractices.useSliceCapacity = { severity: "warn" };
     if (rules.alwaysPreferConst) config.linter.rules.bestPractices.alwaysPreferConst = { severity: "warn" };
+    if (rules.simplifyBooleanReturn) config.linter.rules.bestPractices.simplifyBooleanReturn = { severity: "info" };
+    if (rules.getMustReturnValue) config.linter.rules.bestPractices.getMustReturnValue = { severity: "warn" };
+    if (rules.preferEarlyReturn) config.linter.rules.bestPractices.preferEarlyReturn = { severity: "info" };
+    if (rules.redundantErrorCheck) config.linter.rules.bestPractices.redundantErrorCheck = { severity: "warn" };
+
+    if (rules.boolLiteralExpressions) config.linter.rules.correctness.boolLiteralExpressions = { severity: "info" };
+    if (rules.ambiguousReturns) config.linter.rules.correctness.ambiguousReturns = { severity: "warn" };
 
     if (rules.maxFuncLines) config.linter.rules.complexity.maxFuncLines = { severity: "warn", max: 60 };
     if (rules.cyclomaticComplexity) config.linter.rules.complexity.cyclomaticComplexity = { severity: "warn", max: 10 };
 
     if (rules.receiverNames) config.linter.rules.naming.receiverNames = { severity: "info", maxSize: 3 };
+    if (rules.bannedChars) config.linter.rules.naming.bannedChars = { severity: "error", chars: ["\u200b"] };
+
+    if (rules.preferIncDec) config.linter.rules.style.preferIncDec = { severity: "info" };
+    if (rules.maxLineLength) config.linter.rules.style.maxLineLength = { severity: "warn", max: 120 };
+    if (rules.packageComments) config.linter.rules.style.packageComments = { severity: "info", requireTopOfFile: true };
+    if (rules.commentSpacing) config.linter.rules.style.commentSpacing = { severity: "info" };
+    if (rules.fileHeader) config.linter.rules.style.fileHeader = { severity: "error", header: "Copyright 2024" };
 
     // Apply strictness adjustments
     if (strictness === "strict") {
@@ -79,11 +115,13 @@ const ConfigGenerator = () => {
       if (rules.cyclomaticComplexity) config.linter.rules.complexity.cyclomaticComplexity.max = 5;
       if (rules.receiverNames) config.linter.rules.naming.receiverNames.severity = "warn";
       if (rules.noMagicNumbers) config.linter.rules.bestPractices.noMagicNumbers.severity = "error";
+      if (rules.maxLineLength) config.linter.rules.style.maxLineLength.max = 100;
     } else if (strictness === "lenient") {
       if (rules.maxFuncLines) config.linter.rules.complexity.maxFuncLines.max = 100;
       if (rules.cyclomaticComplexity) config.linter.rules.complexity.cyclomaticComplexity.max = 20;
       if (rules.receiverNames) config.linter.rules.naming.receiverNames.severity = "info";
       if (rules.noMagicNumbers) config.linter.rules.bestPractices.noMagicNumbers.severity = "info";
+      if (rules.maxLineLength) config.linter.rules.style.maxLineLength.max = 140;
     }
 
     // Apply Project Type adjustments
@@ -93,8 +131,9 @@ const ConfigGenerator = () => {
         pattern: "^[A-Z][a-zA-Z0-9]*$",
       };
     } else if (projectType === "api") {
-      if (strictness !== "strict" && rules.maxFuncLines) {
-         config.linter.rules.complexity.maxFuncLines.max = 80;
+      if (strictness !== "strict") {
+         if (rules.maxFuncLines) config.linter.rules.complexity.maxFuncLines.max = 80;
+         if (rules.maxLineLength) config.linter.rules.style.maxLineLength.max = 120;
       }
     }
 
@@ -112,7 +151,7 @@ const ConfigGenerator = () => {
   const formatConfig = (config: any, fmt: Format): string => {
     if (fmt === "json") {
       return JSON.stringify(config, null, 2);
-    } else if (fmt === "yaml") {
+    } else if (fmt === "yaml" || fmt === "yml") {
       return toYaml(config);
     } else {
       return toToml(config);
@@ -215,7 +254,7 @@ const ConfigGenerator = () => {
               
               <div className="space-y-3">
                 <Label className="text-sm font-semibold text-foreground">Active Rules</Label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 h-48 overflow-y-auto pr-2 custom-scrollbar">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pr-2">
                   {Object.keys(rules).map((rule) => (
                     <div key={rule} className="flex items-center space-x-2 p-2 rounded-md hover:bg-white/5 transition-colors">
                       <Checkbox 
@@ -237,7 +276,7 @@ const ConfigGenerator = () => {
               <div className="space-y-2 pt-2 border-t border-white/5">
                 <Label>Output Format</Label>
                 <div className="flex p-1 bg-muted/50 rounded-lg">
-                  {(["json", "yaml", "toml"] as Format[]).map((fmt) => (
+                  {(["json", "yaml", "yml", "toml"] as Format[]).map((fmt) => (
                     <button
                       key={fmt}
                       onClick={() => setFormat(fmt)}
@@ -255,13 +294,28 @@ const ConfigGenerator = () => {
           </div>
   
           {/* Output */}
-          <div className="h-full">
+          <div className={cn("relative group transition-all duration-500", isExpanded ? "h-auto" : "h-[600px]")}>
             <CodeBlock 
               code={generatedConfig} 
               language={format} 
               filename={`serenity.${format}`} 
-              className="h-full"
+              className={cn("transition-all duration-500", isExpanded ? "h-auto" : "h-full")}
+              autoHeight={isExpanded}
             />
+            
+            {!isExpanded && (
+              <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#191724] via-[#191724]/80 to-transparent z-10 pointer-events-none rounded-b-2xl" />
+            )}
+
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 shadow-xl bg-white/10 backdrop-blur-md border border-white/10 hover:bg-white/20 text-white transition-all hover:scale-105 active:scale-95"
+            >
+              <ChevronsUpDown className="mr-2 h-3 w-3" />
+              {isExpanded ? "Collapse" : "See more"}
+            </Button>
           </div>
         </div>
       </div>

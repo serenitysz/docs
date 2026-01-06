@@ -94,7 +94,7 @@ const Hero = () => {
               Fully customizable
             </span>
             <span className="w-1 h-1 rounded-full bg-white/10" />
-            <span className="font-mono text-accent/80">JSON, YAML, TOML</span>
+            <span className="font-mono text-accent/80">JSON, YAML, YML, TOML</span>
           </p>
         </div>
       </div>

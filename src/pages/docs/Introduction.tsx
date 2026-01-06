@@ -5,15 +5,6 @@ import FixableCodeBlock from "@/components/docs/FixableCodeBlock";
 const Introduction = () => {
   return (
     <article className="prose prose-invert max-w-none scroll-smooth">
-      <section id="introduction" className="scroll-mt-20">
-        <h1 className="text-4xl font-bold mb-4 gradient-text">Introduction</h1>
-        
-        <p className="text-lg text-muted-foreground leading-relaxed mb-8">
-          Serenity is a next-generation static analysis tool for Go that prioritizes 
-          precision, speed, and developer experience above all else.
-        </p>
-      </section>
-
       <section id="getting-started" className="scroll-mt-20">
         <h2 className="text-2xl font-semibold mt-12 mb-4">Getting Started</h2>
         <p className="text-lg text-muted-foreground leading-relaxed mb-8">
@@ -67,23 +58,36 @@ const Introduction = () => {
         </p>
 
         <CodeBlock 
-          code={`name: Lint
-on: [push, pull_request]
+          code={`name: Serenity Lint
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   lint:
+    name: Run Linter
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
         with:
           go-version: '1.22'
+          cache: true
+
       - name: Install Serenity
         run: go install github.com/serenitysz/serenity@latest
+
       - name: Run Serenity
+        # Run on all packages and return non-zero exit code if issues found
         run: serenity ./...`}
           language="yaml"
-          filename=".github/workflows/lint.yml"
+          filename=".github/workflows/serenity.yml"
         />
       </section>
 
@@ -104,7 +108,11 @@ jobs:
           <div className="glow-border rounded-lg p-4 bg-card/30">
             <code className="text-accent font-mono">--config, -c &lt;path&gt;</code>
             <p className="text-muted-foreground mt-2 mb-0">
-              Path to the configuration file. Default: <code className="text-foreground bg-muted px-1 rounded">serenity.json</code>
+              Path to the configuration file. Supports <code className="text-foreground bg-muted px-1 rounded">.json</code>, 
+              <code className="text-foreground bg-muted px-1 rounded ml-1">.yaml</code>, 
+              <code className="text-foreground bg-muted px-1 rounded ml-1">.yml</code>, and 
+              <code className="text-foreground bg-muted px-1 rounded ml-1">.toml</code>. 
+              Default: <code className="text-foreground bg-muted px-1 rounded ml-1">serenity.json</code>
             </p>
           </div>
 
@@ -481,6 +489,59 @@ for i := 0; i < 100; i++ {
               </div>
             </div>
           </section>
+
+          {/* Style */}
+          <section>
+            <h3 className="text-2xl font-semibold mb-6 text-foreground">Style</h3>
+            <p className="text-muted-foreground mb-6">
+              Enforce consistent code style and formatting.
+            </p>
+
+            <div className="space-y-8">
+              <div className="glow-border rounded-lg p-6 bg-card/30">
+                <h4 className="text-xl font-medium text-accent mb-2">prefer-inc-dec</h4>
+                <p className="text-muted-foreground mb-4">
+                  Prefer <code>i++</code> and <code>i--</code> over <code>i += 1</code> and <code>i -= 1</code>.
+                </p>
+                <FixableCodeBlock 
+                  badCode={`i += 1`}
+                  goodCode={`i++`}
+                />
+              </div>
+
+              <div className="glow-border rounded-lg p-6 bg-card/30">
+                <h4 className="text-xl font-medium text-accent mb-2">max-line-length</h4>
+                <p className="text-muted-foreground mb-4">
+                  Limits the maximum line length (default: 120).
+                </p>
+              </div>
+
+              <div className="glow-border rounded-lg p-6 bg-card/30">
+                <h4 className="text-xl font-medium text-accent mb-2">package-comments</h4>
+                <p className="text-muted-foreground mb-4">
+                  Requires package comments to be present and properly formatted.
+                </p>
+              </div>
+
+              <div className="glow-border rounded-lg p-6 bg-card/30">
+                <h4 className="text-xl font-medium text-accent mb-2">comment-spacing</h4>
+                <p className="text-muted-foreground mb-4">
+                  Ensures there is a space between <code>//</code> and the comment text.
+                </p>
+                <FixableCodeBlock 
+                  badCode={`//Todo: fix this`}
+                  goodCode={`// Todo: fix this`}
+                />
+              </div>
+
+              <div className="glow-border rounded-lg p-6 bg-card/30">
+                <h4 className="text-xl font-medium text-accent mb-2">file-header</h4>
+                <p className="text-muted-foreground mb-4">
+                  Enforces a specific file header (e.g. copyright notice) at the top of the file.
+                </p>
+              </div>
+            </div>
+          </section>
         </div>
       </section>
 
@@ -488,7 +549,8 @@ for i := 0; i < 100; i++ {
         <hr className="border-white/10 my-12" />
         <h2 className="text-2xl font-semibold mt-12 mb-4">Configuration</h2>
         <p className="text-muted-foreground mb-4">
-          Serenity is highly configurable. Use the interactive generator below to create your <code>serenity.json</code> file.
+          Serenity is highly configurable. You can use <code>JSON</code>, <code>YAML</code>, <code>YML</code>, or <code>TOML</code> for your configuration. 
+          Use the interactive generator below to create your <code>serenity</code> configuration file.
         </p>
         
         <ConfigGenerator />

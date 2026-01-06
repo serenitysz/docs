@@ -9,6 +9,14 @@ const Navbar = () => {
   const location = useLocation();
   const isDocsPage = location.pathname.startsWith("/docs");
 
+  const scrollToSection = (id: string) => {
+    setIsOpen(false);
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-lg">
       <div className="container px-4">
@@ -22,7 +30,7 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-6">
             <Link
-              to="/docs"
+              to="/docs#getting-started"
               className={`text-sm font-medium transition-colors ${
                 isDocsPage ? "text-foreground" : "text-muted-foreground hover:text-foreground"
               }`}
@@ -30,7 +38,7 @@ const Navbar = () => {
               Docs
             </Link>
             <Link
-              to="/docs/rules"
+              to="/docs#rules"
               className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
             >
               Rules
@@ -44,7 +52,7 @@ const Navbar = () => {
               <Github className="h-5 w-5" />
             </a>
             <Button asChild size="sm" className="bg-gradient-to-r from-primary to-accent hover:opacity-90 border-0 text-white font-semibold">
-              <Link to="/docs/getting-started">Get Started</Link>
+              <Link to="/docs#getting-started">Get Started</Link>
             </Button>
           </div>
 
@@ -62,14 +70,14 @@ const Navbar = () => {
           <div className="md:hidden py-4 border-t border-white/10">
             <div className="flex flex-col gap-4">
               <Link
-                to="/docs"
+                to="/docs#getting-started"
                 className="text-sm font-medium text-muted-foreground hover:text-white"
                 onClick={() => setIsOpen(false)}
               >
                 Docs
               </Link>
               <Link
-                to="/docs/rules"
+                to="/docs#rules"
                 className="text-sm font-medium text-muted-foreground hover:text-white"
                 onClick={() => setIsOpen(false)}
               >
@@ -85,7 +93,7 @@ const Navbar = () => {
                 GitHub
               </a>
               <Button asChild size="sm" className="bg-gradient-to-r from-primary to-accent hover:opacity-90 w-fit text-white font-semibold">
-                <Link to="/docs/getting-started" onClick={() => setIsOpen(false)}>
+                <Link to="/docs#getting-started" onClick={() => setIsOpen(false)}>
                   Get Started
                 </Link>
               </Button>
