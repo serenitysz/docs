@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ChevronsUpDown } from "lucide-react";
+import { ChevronsUpDown, ChevronDown, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -25,6 +25,17 @@ const ConfigGenerator = () => {
   const [autoFix, setAutoFix] = useState(false);
   const [generatedConfig, setGeneratedConfig] = useState("");
   const [isExpanded, setIsExpanded] = useState(false);
+  const [openCategories, setOpenCategories] = useState<Record<string, boolean>>({
+    "Errors": true,
+    "Best Practices": true,
+  });
+
+  const toggleCategory = (name: string) => {
+    setOpenCategories(prev => ({
+      ...prev,
+      [name]: !prev[name]
+    }));
+  };
 
   const [rules, setRules] = useState({
     noErrorShadowing: true,
@@ -302,31 +313,47 @@ const ConfigGenerator = () => {
               
               <div className="space-y-6">
                 <Label className="text-sm font-semibold text-foreground">Active Rules</Label>
-                <div className="space-y-6 max-h-[400px] overflow-y-auto pr-4 custom-scrollbar">
-                  {categories.map((category) => (
-                    <div key={category.name} className="space-y-3">
-                      <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground/70 border-b border-white/5 pb-1">
-                        {category.name}
-                      </h4>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        {category.rules.map((rule) => (
-                          <div key={rule} className="flex items-center space-x-2 p-2 rounded-md hover:bg-white/5 transition-colors">
-                            <Checkbox 
-                              id={rule} 
-                              checked={rules[rule as keyof typeof rules]} 
-                              onCheckedChange={() => toggleRule(rule as keyof typeof rules)}
-                            />
-                            <label 
-                              htmlFor={rule} 
-                              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer text-muted-foreground"
-                            >
-                              {rule}
-                            </label>
+                <div className="space-y-4 max-h-[400px] overflow-y-auto pr-4 custom-scrollbar">
+                  {categories.map((category) => {
+                    const isOpen = openCategories[category.name];
+                    return (
+                      <div key={category.name} className="space-y-3 bg-white/[0.02] rounded-lg border border-white/5 overflow-hidden transition-all duration-200">
+                        <button
+                          onClick={() => toggleCategory(category.name)}
+                          className="w-full flex items-center justify-between p-3 hover:bg-white/5 transition-colors group"
+                        >
+                          <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground/70 group-hover:text-foreground transition-colors">
+                            {category.name}
+                          </h4>
+                          {isOpen ? (
+                            <ChevronDown className="h-3 w-3 text-muted-foreground" />
+                          ) : (
+                            <ChevronRight className="h-3 w-3 text-muted-foreground" />
+                          )}
+                        </button>
+                        
+                        {isOpen && (
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 p-3 pt-0 animate-in fade-in slide-in-from-top-1 duration-200">
+                            {category.rules.map((rule) => (
+                              <div key={rule} className="flex items-center space-x-2 p-2 rounded-md hover:bg-white/5 transition-colors">
+                                <Checkbox 
+                                  id={rule} 
+                                  checked={rules[rule as keyof typeof rules]} 
+                                  onCheckedChange={() => toggleRule(rule as keyof typeof rules)}
+                                />
+                                <label 
+                                  htmlFor={rule} 
+                                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer text-muted-foreground"
+                                >
+                                  {rule}
+                                </label>
+                              </div>
+                            ))}
                           </div>
-                        ))}
+                        )}
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
   
