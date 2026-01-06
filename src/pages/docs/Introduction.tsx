@@ -51,6 +51,14 @@ const Introduction = () => {
 
         <CodeBlock code="serenity --fix ." language="bash" />
 
+        <h3 className="text-xl font-semibold mt-8 mb-4">Migration</h3>
+
+        <p className="text-muted-foreground mb-4">
+          Migrating from another linter? Serenity can automatically convert your existing configuration (e.g., <code>.golangci.yml</code>) to our format:
+        </p>
+
+        <CodeBlock code="serenity migrate golangci" language="bash" />
+
         <h3 className="text-xl font-semibold mt-8 mb-4">CI/CD Integration</h3>
 
         <p className="text-muted-foreground mb-4">
@@ -181,6 +189,13 @@ jobs:
             <code className="text-accent font-mono">--version</code>
             <p className="text-muted-foreground mt-2 mb-0">
               Print version information and exit.
+            </p>
+          </div>
+
+          <div className="glow-border rounded-lg p-4 bg-card/30">
+            <code className="text-accent font-mono">migrate &lt;linter&gt;</code>
+            <p className="text-muted-foreground mt-2 mb-0">
+              Migrate configuration from another linter. Supported: <code className="text-foreground bg-muted px-1 rounded">golangci</code>
             </p>
           </div>
 
