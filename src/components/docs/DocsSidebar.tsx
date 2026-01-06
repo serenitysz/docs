@@ -5,11 +5,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 const sidebarItems = [
   {
-    title: "Introduction",
-    id: "introduction",
-    icon: Book,
-  },
-  {
     title: "Getting Started",
     id: "getting-started",
     icon: Rocket,
@@ -20,21 +15,21 @@ const sidebarItems = [
     icon: Terminal,
   },
   {
-    title: "Configuration",
-    id: "configuration",
-    icon: Settings,
-  },
-  {
     title: "Rules",
     id: "rules",
     icon: List,
+  },
+  {
+    title: "Configuration",
+    id: "configuration",
+    icon: Settings,
   },
 ];
 
 const DocsSidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [activeSection, setActiveSection] = useState("introduction");
+  const [activeSection, setActiveSection] = useState("getting-started");
 
   // Handle Scroll Spy
   useEffect(() => {
@@ -47,8 +42,6 @@ const DocsSidebar = () => {
         });
       },
       {
-        // Trigger when the element is near the top of the viewport
-        // -20% from top, -35% from bottom creates a "sweet spot"
         rootMargin: "-20% 0px -35% 0px",
         threshold: 0,
       }
@@ -69,7 +62,6 @@ const DocsSidebar = () => {
       const id = location.hash.replace("#", "");
       if (sidebarItems.some(item => item.id === id)) {
         setActiveSection(id);
-        // Scroll to element if not already there (helper for initial load)
         const element = document.getElementById(id);
         if (element) {
           element.scrollIntoView({ behavior: "smooth" });
@@ -85,7 +77,6 @@ const DocsSidebar = () => {
     
     const element = document.getElementById(id);
     if (element) {
-      // Offset for fixed header if needed, but scroll-mt-20 class on section usually handles it
       element.scrollIntoView({ behavior: "smooth" });
     }
   };

@@ -1,5 +1,6 @@
 import CodeBlock from "@/components/docs/CodeBlock";
 import ConfigGenerator from "@/components/docs/ConfigGenerator";
+import FixableCodeBlock from "@/components/docs/FixableCodeBlock";
 
 const Introduction = () => {
   return (
@@ -198,19 +199,14 @@ jobs:
         <CodeBlock code='serenity -c .serenity.json --exclude "**/*_test.go" ./...' language="bash" />
       </section>
 
-      <section id="configuration" className="scroll-mt-20">
-        <h2 className="text-2xl font-semibold mt-12 mb-4">Configuration</h2>
-        <p className="text-muted-foreground mb-4">
-          Serenity is highly configurable. Use the interactive generator below to create your <code>serenity.json</code> file.
-        </p>
-        
-        <ConfigGenerator />
-      </section>
-
       <section id="rules" className="scroll-mt-20">
         <hr className="border-white/10 my-12" />
 
-        <h2 className="text-3xl font-bold mb-8">Rule Groups</h2>
+        <h2 className="text-3xl font-bold mb-8">Rules</h2>
+        <p className="text-lg text-muted-foreground leading-relaxed mb-8">
+          Serenity comes with a comprehensive set of rules to help you write better Go code.
+          All rules are configurable and can be enabled or disabled individually.
+        </p>
 
         <div className="space-y-16">
           {/* Error Handling */}
@@ -226,21 +222,17 @@ jobs:
                 <p className="text-muted-foreground mb-4">
                   Avoid shadowing the built-in <code>error</code> type or variables named <code>error</code>.
                 </p>
-                <CodeBlock 
-                  code={`// Bad
-func main() {
-    error := doSomething() // Shadows built-in error type if named 'error' incorrectly in scopes
+                <FixableCodeBlock 
+                  badCode={`func main() {
+    error := doSomething() // Shadows built-in error type
     // ...
-}
-
-// Good
-func main() {
+}`}
+                  goodCode={`func main() {
     err := doSomething()
     if err != nil {
         // ...
     }
-}`} 
-                  language="go" 
+}`}
                 />
               </div>
 
@@ -249,13 +241,9 @@ func main() {
                 <p className="text-muted-foreground mb-4">
                   Error strings should not be capitalized (unless beginning with proper nouns or acronyms) or end with punctuation.
                 </p>
-                <CodeBlock 
-                  code={`// Bad
-errors.New("Something went wrong.")
-
-// Good
-errors.New("something went wrong")`} 
-                  language="go" 
+                <FixableCodeBlock 
+                  badCode={`errors.New("Something went wrong.")`}
+                  goodCode={`errors.New("something went wrong")`}
                 />
               </div>
 
@@ -264,23 +252,19 @@ errors.New("something went wrong")`}
                 <p className="text-muted-foreground mb-4">
                   Errors returned from external packages should be wrapped to provide context.
                 </p>
-                <CodeBlock 
-                  code={`// Bad
-func GetData() error {
+                <FixableCodeBlock 
+                  badCode={`func GetData() error {
     if err := db.Query(); err != nil {
         return err
     }
     return nil
-}
-
-// Good
-func GetData() error {
+}`}
+                  goodCode={`func GetData() error {
     if err := db.Query(); err != nil {
         return fmt.Errorf("failed to query data: %w", err)
     }
     return nil
-}`} 
-                  language="go" 
+}`}
                 />
               </div>
             </div>
@@ -299,13 +283,9 @@ func GetData() error {
                 <p className="text-muted-foreground mb-4">
                   Avoid dot imports to prevent namespace pollution and ambiguity.
                 </p>
-                <CodeBlock 
-                  code={`// Bad
-import . "fmt"
-
-// Good
-import "fmt"`} 
-                  language="go" 
+                <FixableCodeBlock 
+                  badCode={`import . "fmt"`}
+                  goodCode={`import "fmt"`}
                 />
               </div>
 
@@ -341,22 +321,18 @@ import "reflect"
                 <p className="text-muted-foreground mb-4">
                   Deferring statements inside a loop can cause memory leaks because they are only executed when the function exits.
                 </p>
-                <CodeBlock 
-                  code={`// Bad
-for _, file := range files {
+                <FixableCodeBlock 
+                  badCode={`for _, file := range files {
     f, _ := os.Open(file)
     defer f.Close() // Stacks up until function returns
-}
-
-// Good
-for _, file := range files {
+}`}
+                  goodCode={`for _, file := range files {
     func() {
         f, _ := os.Open(file)
         defer f.Close()
         // ...
     }()
-}`} 
-                  language="go" 
+}`}
                 />
               </div>
 
@@ -365,13 +341,9 @@ for _, file := range files {
                 <p className="text-muted-foreground mb-4">
                   <code>context.Context</code> should always be the first parameter of a function.
                 </p>
-                <CodeBlock 
-                  code={`// Bad
-func FetchData(id string, ctx context.Context) error { ... }
-
-// Good
-func FetchData(ctx context.Context, id string) error { ... }`} 
-                  language="go" 
+                <FixableCodeBlock 
+                  badCode={`func FetchData(id string, ctx context.Context) error { ... }`}
+                  goodCode={`func FetchData(ctx context.Context, id string) error { ... }`}
                 />
               </div>
 
@@ -380,14 +352,10 @@ func FetchData(ctx context.Context, id string) error { ... }`}
                 <p className="text-muted-foreground mb-4">
                   Avoid magic numbers; use named constants instead for better readability and maintainability.
                 </p>
-                <CodeBlock 
-                  code={`// Bad
-time.Sleep(86400 * time.Second)
-
-// Good
-const SecondsInDay = 86400
-time.Sleep(SecondsInDay * time.Second)`} 
-                  language="go" 
+                <FixableCodeBlock 
+                  badCode={`time.Sleep(86400 * time.Second)`}
+                  goodCode={`const SecondsInDay = 86400
+time.Sleep(SecondsInDay * time.Second)`}
                 />
               </div>
 
@@ -396,19 +364,15 @@ time.Sleep(SecondsInDay * time.Second)`}
                 <p className="text-muted-foreground mb-4">
                   Specify capacity when allocating slices with <code>make</code> if the length is known, to avoid reallocations.
                 </p>
-                <CodeBlock 
-                  code={`// Bad
-data := make([]int, 0)
+                <FixableCodeBlock 
+                  badCode={`data := make([]int, 0)
 for i := 0; i < 100; i++ {
     data = append(data, i)
-}
-
-// Good
-data := make([]int, 0, 100)
+}`}
+                  goodCode={`data := make([]int, 0, 100)
 for i := 0; i < 100; i++ {
     data = append(data, i)
-}`} 
-                  language="go" 
+}`}
                 />
               </div>
 
@@ -417,13 +381,9 @@ for i := 0; i < 100; i++ {
                 <p className="text-muted-foreground mb-4">
                   Prefer <code>const</code> over <code>var</code> for values that do not change.
                 </p>
-                <CodeBlock 
-                  code={`// Bad
-var Pi = 3.14
-
-// Good
-const Pi = 3.14`} 
-                  language="go" 
+                <FixableCodeBlock 
+                  badCode={`var Pi = 3.14`}
+                  goodCode={`const Pi = 3.14`}
                 />
               </div>
             </div>
@@ -442,17 +402,13 @@ const Pi = 3.14`}
                 <p className="text-muted-foreground mb-4">
                   Detects empty code blocks which might indicate unfinished logic.
                 </p>
-                <CodeBlock 
-                  code={`// Bad
-if user.IsActive {
+                <FixableCodeBlock 
+                  badCode={`if user.IsActive {
     // missing logic
-}
-
-// Good
-if user.IsActive {
+}`}
+                  goodCode={`if user.IsActive {
     processUser(user)
-}`} 
-                  language="go" 
+}`}
                 />
               </div>
 
@@ -461,18 +417,14 @@ if user.IsActive {
                 <p className="text-muted-foreground mb-4">
                   Detects method receivers that are not used inside the method body.
                 </p>
-                <CodeBlock 
-                  code={`// Bad
-func (u *User) GetStaticID() int {
+                <FixableCodeBlock 
+                  badCode={`func (u *User) GetStaticID() int {
     return 42
-}
-
-// Good
-func (u *User) GetStaticID() int {
+}`}
+                  goodCode={`func (u *User) GetStaticID() int {
     _ = u // explicit ignore or remove receiver name
     return 42
-}`} 
-                  language="go" 
+}`}
                 />
               </div>
             </div>
@@ -522,19 +474,26 @@ func (u *User) GetStaticID() int {
                 <p className="text-muted-foreground mb-4">
                   Receiver names should be short and consistent.
                 </p>
-                <CodeBlock 
-                  code={`// Bad
-func (service *UserService) Get() { ... }
-
-// Good
-func (s *UserService) Get() { ... }`} 
-                  language="go" 
+                <FixableCodeBlock 
+                  badCode={`func (service *UserService) Get() { ... }`}
+                  goodCode={`func (s *UserService) Get() { ... }`}
                 />
               </div>
             </div>
           </section>
         </div>
       </section>
+
+      <section id="configuration" className="scroll-mt-20">
+        <hr className="border-white/10 my-12" />
+        <h2 className="text-2xl font-semibold mt-12 mb-4">Configuration</h2>
+        <p className="text-muted-foreground mb-4">
+          Serenity is highly configurable. Use the interactive generator below to create your <code>serenity.json</code> file.
+        </p>
+        
+        <ConfigGenerator />
+      </section>
+
     </article>
   );
 };
