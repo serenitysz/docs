@@ -1,5 +1,5 @@
 import CodeBlock from "@/components/docs/CodeBlock";
-import ConfigExample from "@/components/docs/ConfigExample";
+import ConfigGenerator from "@/components/docs/ConfigGenerator";
 
 const Introduction = () => {
   return (
@@ -50,29 +50,6 @@ const Introduction = () => {
         </p>
 
         <CodeBlock code="serenity ./pkg/..." language="bash" />
-
-        <h3 className="text-xl font-semibold mt-8 mb-4">Quick Configuration</h3>
-
-        <p className="text-muted-foreground mb-4">
-          Create a <code className="text-accent bg-muted px-1.5 py-0.5 rounded">serenity.json</code> file 
-          in your project root to customize Serenity's behavior:
-        </p>
-
-        <CodeBlock 
-          code={`{
-  "rules": {
-    "error-check": "error",
-    "unused-param": "warn",
-    "shadow-var": "off"
-  },
-  "exclude": [
-    "vendor/**",
-    "**/*_test.go"
-  ]
-}`}
-          language="json"
-          filename="serenity.json"
-        />
 
         <h3 className="text-xl font-semibold mt-8 mb-4">Auto-fix</h3>
 
@@ -224,11 +201,10 @@ jobs:
       <section id="configuration" className="scroll-mt-20">
         <h2 className="text-2xl font-semibold mt-12 mb-4">Configuration</h2>
         <p className="text-muted-foreground mb-4">
-          Serenity is highly configurable. You can define your rules in a configuration file.
-          Below is a real-world example of how to configure the linter rules in different formats.
+          Serenity is highly configurable. Use the interactive generator below to create your <code>serenity.json</code> file.
         </p>
         
-        <ConfigExample />
+        <ConfigGenerator />
       </section>
 
       <section id="rules" className="scroll-mt-20">

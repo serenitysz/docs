@@ -3,14 +3,16 @@ import { Check, Copy } from "lucide-react";
 import { Highlight } from "prism-react-renderer";
 import { Button } from "@/components/ui/button";
 import { rosePineTheme } from "@/lib/prism-theme";
+import { cn } from "@/lib/utils";
 
 interface CodeBlockProps {
   code: string;
   language?: string;
   filename?: string;
+  className?: string;
 }
 
-const CodeBlock = ({ code, language = "bash", filename }: CodeBlockProps) => {
+const CodeBlock = ({ code, language = "bash", filename, className }: CodeBlockProps) => {
   const [copied, setCopied] = useState(false);
 
   const copyToClipboard = async () => {
@@ -20,25 +22,25 @@ const CodeBlock = ({ code, language = "bash", filename }: CodeBlockProps) => {
   };
 
   return (
-    <div className="relative group my-8">
+    <div className={cn("relative group", className)}>
       {/* Glow effect background */}
       <div className="absolute -inset-1 bg-gradient-to-r from-primary/5 via-accent/5 to-primary/5 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-      <div className="relative rounded-2xl overflow-hidden border border-white/10 bg-[#191724]/60 backdrop-blur-md shadow-xl">
+      <div className="relative h-full rounded-2xl overflow-hidden border border-white/10 bg-[#191724]/60 backdrop-blur-md shadow-xl flex flex-col">
         {/* Liquid glass gloss overlay */}
         <div className="absolute inset-0 pointer-events-none bg-gradient-to-br from-white/5 via-transparent to-transparent z-10" />
         
         {filename && (
-          <div className="px-4 py-3 border-b border-white/5 bg-white/5 flex items-center justify-between relative z-20">
+          <div className="px-4 py-3 border-b border-white/5 bg-white/5 flex items-center justify-between relative z-20 shrink-0">
             <span className="text-sm text-muted-foreground font-mono">{filename}</span>
           </div>
         )}
 
-        <div className="relative z-0">
+        <div className="relative z-0 flex-1 overflow-auto">
           <Highlight theme={rosePineTheme} code={code} language={language}>
-            {({ className, style, tokens, getLineProps, getTokenProps }) => (
+            {({ className: highlightClass, style, tokens, getLineProps, getTokenProps }) => (
               <pre
-                className={`p-6 overflow-x-auto text-sm md:text-base font-mono scrollbar-none ${className}`}
+                className={`p-6 text-sm md:text-base font-mono scrollbar-none ${highlightClass}`}
                 style={{ ...style, margin: 0, backgroundColor: 'transparent' }}
               >
                 {tokens.map((line, i) => (

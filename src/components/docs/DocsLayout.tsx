@@ -16,7 +16,7 @@ const DocsLayout = () => {
       <div className="flex pt-16 relative z-10">
         <DocsSidebar />
         <main className="flex-1 min-w-0">
-          <div className="max-w-4xl mx-auto px-6 py-12">
+          <div className="max-w-6xl mx-auto px-6 py-12">
             <Outlet />
           </div>
         </main>
