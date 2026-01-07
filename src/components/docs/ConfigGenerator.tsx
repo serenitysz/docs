@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import CodeBlock from "./CodeBlock";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
@@ -17,6 +17,27 @@ import { cn } from "@/lib/utils";
 type Format = "json" | "yaml" | "yml" | "toml";
 type Strictness = "lenient" | "standard" | "strict";
 type ProjectType = "standard" | "library" | "api";
+
+interface Config {
+  $schema: string;
+  linter: {
+    use: boolean;
+    rules: {
+      recommended: boolean;
+      errors: Record<string, unknown>;
+      imports: Record<string, unknown>;
+      bestPractices: Record<string, unknown>;
+      correctness: Record<string, unknown>;
+      complexity: Record<string, unknown>;
+      naming: Record<string, unknown>;
+      style: Record<string, unknown>;
+    };
+    assistance?: {
+      use: boolean;
+      autofix: boolean;
+    };
+  };
+}
 
 const ConfigGenerator = () => {
   const [format, setFormat] = useState<Format>("json");
@@ -116,10 +137,10 @@ const ConfigGenerator = () => {
   useEffect(() => {
     const config = generateConfig();
     setGeneratedConfig(config);
-  }, [format, strictness, projectType, autoFix, rules]);
+  }, [generateConfig]);
 
-  const generateConfig = () => {
-    const config: any = {
+  const generateConfig = useCallback(() => {
+    const config: Config = {
       $schema: "https://raw.githubusercontent.com/serenitysz/serenity/main/schema.json",
       linter: {
         use: true,
@@ -170,17 +191,17 @@ const ConfigGenerator = () => {
 
     // Apply strictness adjustments
     if (strictness === "strict") {
-      if (rules.maxFuncLines) config.linter.rules.complexity.maxFuncLines.max = 30;
-      if (rules.cyclomaticComplexity) config.linter.rules.complexity.cyclomaticComplexity.max = 5;
-      if (rules.receiverNames) config.linter.rules.naming.receiverNames.severity = "warn";
-      if (rules.noMagicNumbers) config.linter.rules.bestPractices.noMagicNumbers.severity = "error";
-      if (rules.maxLineLength) config.linter.rules.style.maxLineLength.max = 100;
+      if (rules.maxFuncLines) (config.linter.rules.complexity.maxFuncLines as Record<string, unknown>).max = 30;
+      if (rules.cyclomaticComplexity) (config.linter.rules.complexity.cyclomaticComplexity as Record<string, unknown>).max = 5;
+      if (rules.receiverNames) (config.linter.rules.naming.receiverNames as Record<string, unknown>).severity = "warn";
+      if (rules.noMagicNumbers) (config.linter.rules.bestPractices.noMagicNumbers as Record<string, unknown>).severity = "error";
+      if (rules.maxLineLength) (config.linter.rules.style.maxLineLength as Record<string, unknown>).max = 100;
     } else if (strictness === "lenient") {
-      if (rules.maxFuncLines) config.linter.rules.complexity.maxFuncLines.max = 100;
-      if (rules.cyclomaticComplexity) config.linter.rules.complexity.cyclomaticComplexity.max = 20;
-      if (rules.receiverNames) config.linter.rules.naming.receiverNames.severity = "info";
-      if (rules.noMagicNumbers) config.linter.rules.bestPractices.noMagicNumbers.severity = "info";
-      if (rules.maxLineLength) config.linter.rules.style.maxLineLength.max = 140;
+      if (rules.maxFuncLines) (config.linter.rules.complexity.maxFuncLines as Record<string, unknown>).max = 100;
+      if (rules.cyclomaticComplexity) (config.linter.rules.complexity.cyclomaticComplexity as Record<string, unknown>).max = 20;
+      if (rules.receiverNames) (config.linter.rules.naming.receiverNames as Record<string, unknown>).severity = "info";
+      if (rules.noMagicNumbers) (config.linter.rules.bestPractices.noMagicNumbers as Record<string, unknown>).severity = "info";
+      if (rules.maxLineLength) (config.linter.rules.style.maxLineLength as Record<string, unknown>).max = 140;
     }
 
     // Apply Project Type adjustments
@@ -191,8 +212,8 @@ const ConfigGenerator = () => {
       };
     } else if (projectType === "api") {
       if (strictness !== "strict") {
-         if (rules.maxFuncLines) config.linter.rules.complexity.maxFuncLines.max = 80;
-         if (rules.maxLineLength) config.linter.rules.style.maxLineLength.max = 120;
+         if (rules.maxFuncLines) (config.linter.rules.complexity.maxFuncLines as Record<string, unknown>).max = 80;
+         if (rules.maxLineLength) (config.linter.rules.style.maxLineLength as Record<string, unknown>).max = 120;
       }
     }
 
@@ -205,56 +226,9 @@ const ConfigGenerator = () => {
     }
 
     return formatConfig(config, format);
-  };
+  }, [format, strictness, projectType, autoFix, rules]);
 
-  const formatConfig = (config: any, fmt: Format): string => {
-    if (fmt === "json") {
-      return JSON.stringify(config, null, 2);
-    } else if (fmt === "yaml" || fmt === "yml") {
-      return toYaml(config);
-    } else {
-      return toToml(config);
-    }
-  };
 
-  const toYaml = (obj: any, indent = ""): string => {
-    let output = "";
-    for (const key in obj) {
-      const value = obj[key];
-      if (typeof value === "object" && value !== null) {
-        if (Object.keys(value).length === 0) continue; 
-        output += `${indent}${key}:\n${toYaml(value, indent + "  ")}`;
-      } else {
-         const valStr = typeof value === "string" ? `"${value}"` : value;
-         output += `${indent}${key}: ${valStr}\n`;
-      }
-    }
-    return output;
-  };
-
-  const toToml = (obj: any): string => {
-    let output = `"$schema" = "${obj.$schema}"\n\n`;
-    
-    const serializeSection = (prefix: string, section: any) => {
-      let out = "";
-      for(const key in section) {
-        if(typeof section[key] !== 'object') {
-           const val = typeof section[key] === "string" ? `"${section[key]}"` : section[key];
-           out += `${key} = ${val}\n`;
-        }
-      }
-      for(const key in section) {
-        if(typeof section[key] === 'object' && section[key] !== null) {
-           if (Object.keys(section[key]).length === 0) continue;
-           out += `\n[${prefix}${key}]\n`;
-           out += serializeSection(`${prefix}${key}.`, section[key]);
-        }
-      }
-      return out;
-    }
-
-    return output + serializeSection("", obj.linter ? {linter: obj.linter} : obj);
-  };
 
   const toggleRule = (rule: keyof typeof rules) => {
     setRules(prev => ({ ...prev, [rule]: !prev[rule] }));
@@ -406,3 +380,52 @@ const ConfigGenerator = () => {
     );};
 
 export default ConfigGenerator;
+
+const formatConfig = (config: Record<string, unknown>, fmt: Format): string => {
+  if (fmt === "json") {
+    return JSON.stringify(config, null, 2);
+  } else if (fmt === "yaml" || fmt === "yml") {
+    return toYaml(config);
+  } else {
+    return toToml(config);
+  }
+};
+
+const toYaml = (obj: Record<string, unknown>, indent = ""): string => {
+  let output = "";
+  for (const key in obj) {
+    const value = obj[key];
+    if (typeof value === "object" && value !== null) {
+      if (Object.keys(value).length === 0) continue; 
+      output += `${indent}${key}:\n${toYaml(value as Record<string, unknown>, indent + "  ")}`;
+    } else {
+       const valStr = typeof value === "string" ? `"${value}"` : value;
+       output += `${indent}${key}: ${valStr}\n`;
+    }
+  }
+  return output;
+};
+
+const toToml = (obj: Record<string, unknown>): string => {
+  const output = `"$schema" = "${obj.$schema}"\n\n`;
+  
+  const serializeSection = (prefix: string, section: Record<string, unknown>) => {
+    let out = "";
+    for(const key in section) {
+      if(typeof section[key] !== 'object') {
+         const val = typeof section[key] === "string" ? `"${section[key]}"` : section[key];
+         out += `${key} = ${val}\n`;
+      }
+    }
+    for(const key in section) {
+      if(typeof section[key] === 'object' && section[key] !== null) {
+         if (Object.keys(section[key] as object).length === 0) continue;
+         out += `\n[${prefix}${key}]\n`;
+         out += serializeSection(`${prefix}${key}.`, section[key] as Record<string, unknown>);
+      }
+    }
+    return out;
+  }
+
+  return output + serializeSection("", obj.linter ? {linter: obj.linter} as Record<string, unknown> : obj);
+};

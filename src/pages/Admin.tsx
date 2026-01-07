@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,7 +22,7 @@ const Admin = () => {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
-  const fetchEntries = async () => {
+  const fetchEntries = useCallback(async () => {
     setLoading(true);
     const { data, error } = await supabase
       .from("waitlist")
@@ -36,20 +36,20 @@ const Admin = () => {
       setEntries(data || []);
     }
     setLoading(false);
-  };
+  }, []);
 
-  const checkUser = async () => {
+  const checkUser = useCallback(async () => {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
       navigate("/login");
     } else {
       fetchEntries();
     }
-  };
+  }, [navigate, fetchEntries]);
 
   useEffect(() => {
     checkUser();
-  }, []);
+  }, [checkUser]);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -83,9 +83,10 @@ const Admin = () => {
       toast.success("Newsletter sent successfully!");
       setSubject("");
       setMessage("");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error sending newsletter:', error);
-      toast.error(error.message || "Failed to send newsletter");
+      const errorMessage = error instanceof Error ? error.message : "Failed to send newsletter";
+      toast.error(errorMessage);
     } finally {
       setSending(false);
     }

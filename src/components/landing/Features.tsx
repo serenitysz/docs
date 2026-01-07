@@ -65,7 +65,6 @@ const features = [
 ];
 
 const Features = () => {
-  const [visibleLines, setVisibleLines] = useState<number[]>([]);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -84,24 +83,7 @@ const Features = () => {
     return () => observer.disconnect();
   }, []);
 
-  useEffect(() => {
-    if (!isVisible) return;
-
-    // Reset visible lines when component becomes visible
-    setVisibleLines([]);
-
-        const timeouts: NodeJS.Timeout[] = [];
-        codeLines.forEach((_, index) => {
-          const timeout = setTimeout(() => {
-            setVisibleLines((prev) => [...prev, index]);
-          }, index * 40); // Faster stagger
-          timeouts.push(timeout);
-        });
-        
-        return () => timeouts.forEach(clearTimeout);
-      }, [isVisible]);
-    
-      const codeString = codeLines.join('\n');
+  const codeString = codeLines.join('\n');
   return (
     <section id="features-section" className="py-24 bg-[#08080a] relative overflow-hidden">
       {/* Smooth transition from hero */}
@@ -189,13 +171,14 @@ const Features = () => {
 
                                     className={`transition-all duration-150 ${
 
-                                      visibleLines.includes(i)
+                                      isVisible
 
                                         ? 'opacity-100 translate-x-0'
 
                                         : 'opacity-0 -translate-x-4'
 
                                     }`}
+                                    style={{ transitionDelay: `${i * 40}ms` }}
 
                                   >
 
