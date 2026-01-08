@@ -134,7 +134,7 @@ jobs:
           <div className="glow-border rounded-lg p-4 bg-card/30">
             <code className="text-accent font-mono">--unsafe, -u</code>
             <p className="text-muted-foreground mt-2 mb-0">
-              Enables aggressive auto-fixes that may alter program logic or require structural changes. Use with caution and always review the diff.
+              Enables aggressive auto-fixes. Use with caution and always review the diff.
             </p>
           </div>
 
@@ -217,7 +217,7 @@ jobs:
         <h3 className="text-xl font-semibold mt-8 mb-4">Examples</h3>
 
         <p className="text-muted-foreground mb-4">Lint all packages with auto-fix:</p>
-        <CodeBlock code="serenity --fix ./..." language="bash" />
+        <CodeBlock code="serenity check --write ./..." language="bash" />
 
         <p className="text-muted-foreground mb-4">Output in JSON format for CI:</p>
         <CodeBlock code="serenity --format json ./..." language="bash" />
@@ -226,7 +226,7 @@ jobs:
         <CodeBlock code="serenity --severity error ./..." language="bash" />
 
         <p className="text-muted-foreground mb-4">Use custom config and exclude tests:</p>
-        <CodeBlock code='serenity -c .serenity.json --exclude "**/*_test.go" ./...' language="bash" />
+        <CodeBlock code='serenity --config .serenity.json --exclude "**/*_test.go" ./...' language="bash" />
       </section>
 
       <section id="rules" className="scroll-mt-20">
