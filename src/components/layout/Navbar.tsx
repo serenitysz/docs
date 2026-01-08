@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Github, Menu, X } from "lucide-react";
+import { Github, Menu, X, Twitter } from "lucide-react";
 import { useState } from "react";
 import serenityLogo from "@/assets/serenity-logo.png";
 
@@ -51,6 +51,14 @@ const Navbar = () => {
             >
               <Github className="h-5 w-5" />
             </a>
+            <a
+              href="https://twitter.com/serenitylint"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <Twitter className="h-5 w-5" />
+            </a>
             <Button asChild size="sm" className="bg-gradient-to-r from-primary to-accent hover:opacity-90 border-0 text-white font-semibold">
               <Link to="/docs#getting-started">Get Started</Link>
             </Button>
@@ -91,6 +99,16 @@ const Navbar = () => {
               >
                 <Github className="h-4 w-4" />
                 GitHub
+              </a>
+              <a
+                href="https://twitter.com/serenitylint"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm font-medium text-muted-foreground hover:text-white flex items-center gap-2"
+                onClick={() => setIsOpen(false)}
+              >
+                <Twitter className="h-4 w-4" />
+                Twitter
               </a>
               <Button asChild size="sm" className="bg-gradient-to-r from-primary to-accent hover:opacity-90 w-fit text-white font-semibold">
                 <Link to="/docs#getting-started" onClick={() => setIsOpen(false)}>

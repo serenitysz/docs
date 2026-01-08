@@ -4,7 +4,7 @@ import FixableCodeBlock from "@/components/docs/FixableCodeBlock";
 
 const Introduction = () => {
   return (
-    <article className="prose prose-invert max-w-none scroll-smooth">
+    <article className="prose prose-invert max-w-none scroll-smooth prose-code:before:content-none prose-code:after:content-none">
       <section id="getting-started" className="scroll-mt-20">
         <h2 className="text-2xl font-semibold mt-12 mb-4">Getting Started</h2>
         <p className="text-lg text-muted-foreground leading-relaxed mb-8">
@@ -35,21 +35,21 @@ const Introduction = () => {
           Run Serenity on your current directory:
         </p>
 
-        <CodeBlock code="serenity ." language="bash" />
+        <CodeBlock code="serenity check" language="bash" />
 
         <p className="text-muted-foreground mb-4">
           Or specify a package or file:
         </p>
 
-        <CodeBlock code="serenity ./pkg/..." language="bash" />
+        <CodeBlock code="serenity check ./pkg/..." language="bash" />
 
         <h3 className="text-xl font-semibold mt-8 mb-4">Auto-fix</h3>
 
         <p className="text-muted-foreground mb-4">
-          Many issues can be automatically fixed using the <code className="text-accent bg-muted px-1.5 py-0.5 rounded">--fix</code> flag:
+          Many issues can be automatically fixed using the <code className="text-accent bg-muted px-1.5 py-0.5 rounded">--write</code> or <code className="text-accent bg-muted px-1.5 py-0.5 rounded">-w</code> flag:
         </p>
 
-        <CodeBlock code="serenity --fix ." language="bash" />
+        <CodeBlock code="serenity check --write" language="bash" />
 
         <h3 className="text-xl font-semibold mt-8 mb-4">Migration</h3>
 
@@ -125,9 +125,16 @@ jobs:
           </div>
 
           <div className="glow-border rounded-lg p-4 bg-card/30">
-            <code className="text-accent font-mono">fix</code>
+            <code className="text-accent font-mono">--write</code>
             <p className="text-muted-foreground mt-2 mb-0">
               Automatically fix issues where possible.
+            </p>
+          </div>
+
+          <div className="glow-border rounded-lg p-4 bg-card/30">
+            <code className="text-accent font-mono">--unsafe, -u</code>
+            <p className="text-muted-foreground mt-2 mb-0">
+              Enables aggressive auto-fixes that may alter program logic or require structural changes. Use with caution and always review the diff.
             </p>
           </div>
 

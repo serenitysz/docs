@@ -134,11 +134,6 @@ const ConfigGenerator = () => {
     },
   ];
 
-  useEffect(() => {
-    const config = generateConfig();
-    setGeneratedConfig(config);
-  }, [generateConfig]);
-
   const generateConfig = useCallback(() => {
     const config: Config = {
       $schema: "https://raw.githubusercontent.com/serenitysz/serenity/main/schema.json",
@@ -227,6 +222,11 @@ const ConfigGenerator = () => {
 
     return formatConfig(config, format);
   }, [format, strictness, projectType, autoFix, rules]);
+
+  useEffect(() => {
+    const config = generateConfig();
+    setGeneratedConfig(config);
+  }, [generateConfig]);
 
 
 

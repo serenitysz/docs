@@ -1,6 +1,12 @@
 import { useState } from "react";
 import { Check, Copy } from "lucide-react";
 import { Highlight } from "prism-react-renderer";
+import "@/lib/prism-setup";
+import "prismjs/components/prism-bash";
+import "prismjs/components/prism-yaml";
+import "prismjs/components/prism-toml";
+import "prismjs/components/prism-go";
+import "prismjs/components/prism-json";
 import { Button } from "@/components/ui/button";
 import { rosePineTheme } from "@/lib/prism-theme";
 import { cn } from "@/lib/utils";

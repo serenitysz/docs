@@ -16,10 +16,10 @@ const Footer = () => {
             <Link to="/docs" className="hover:text-foreground transition-colors">
               Documentation
             </Link>
-            <Link to="/docs/getting-started" className="hover:text-foreground transition-colors">
+            <Link to="/docs#getting-started" className="hover:text-foreground transition-colors">
               Getting Started
             </Link>
-            <Link to="/docs/rules" className="hover:text-foreground transition-colors">
+            <Link to="/docs#rules" className="hover:text-foreground transition-colors">
               Rules
             </Link>
             <a
