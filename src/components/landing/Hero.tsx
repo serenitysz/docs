@@ -39,19 +39,19 @@ const Hero = () => {
   return (
     <section className="relative min-h-screen pt-20 flex items-center justify-center overflow-hidden bg-[#08080a]">
       {/* Background patterns & effects */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0 pointer-events-none">
         {/* Subtle Grid */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_80%)]" />
         
-        {/* Charming glow orbs */}
-        <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px] animate-pulse-glow" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-accent/10 rounded-full blur-[120px] animate-pulse-glow" style={{ animationDelay: '2s' }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[150px]" />
+        {/* Optimized Glows (Radial Gradients instead of CSS Blur) */}
+        <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-[radial-gradient(circle,hsl(var(--primary)/0.15)_0%,transparent_70%)] animate-pulse-glow will-change-[opacity]" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-[radial-gradient(circle,hsl(var(--accent)/0.15)_0%,transparent_70%)] animate-pulse-glow will-change-[opacity]" style={{ animationDelay: '2s' }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[radial-gradient(circle,hsl(var(--primary)/0.08)_0%,transparent_70%)]" />
       </div>
 
       <div className="container relative z-10 px-4 py-20 flex flex-col items-center text-center">
         {/* New bold headline */}
-        <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight mb-8 leading-[1.05] opacity-0 animate-fade-up">
+        <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight mb-8 leading-[1.05] opacity-0 animate-fade-up will-change-[transform,opacity]">
           <span className="text-white">The </span>
           <span className="gradient-text">aggressive</span>
           <span className="text-white"> Go linter</span>

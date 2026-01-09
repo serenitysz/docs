@@ -52,9 +52,9 @@ const Benchmarks = () => {
 
   return (
     <section id="benchmarks-section" className="py-32 bg-[#08080a] relative overflow-hidden">
-      {/* Background glow effects */}
-      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[700px] h-[700px] bg-primary/5 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[700px] h-[700px] bg-accent/5 rounded-full blur-[120px] pointer-events-none" />
+      {/* Background glow effects (Optimized) */}
+      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[700px] h-[700px] bg-[radial-gradient(circle,hsl(var(--primary)/0.08)_0%,transparent_70%)] pointer-events-none" />
+      <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[700px] h-[700px] bg-[radial-gradient(circle,hsl(var(--accent)/0.08)_0%,transparent_70%)] pointer-events-none" />
 
       <div className="container px-4 relative z-10">
         <div className="max-w-6xl mx-auto space-y-24">
@@ -79,7 +79,7 @@ const Benchmarks = () => {
                     <div className="h-4 md:h-5 w-full bg-white/5 rounded-full overflow-hidden">
                       {/* Bar Fill */}
                       <div
-                        className={`h-full rounded-full transition-all duration-1000 ease-out relative ${
+                        className={`h-full rounded-full transition-all duration-1000 ease-out relative will-change-[width] ${
                           item.isSerenity
                             ? 'bg-gradient-to-r from-primary to-accent shadow-[0_0_25px_rgba(var(--primary),0.4)]'
                             : 'bg-muted-foreground/30'

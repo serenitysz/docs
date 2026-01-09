@@ -135,11 +135,8 @@ const Features = () => {
 
                     <div className="relative h-full">
 
-                      {/* Glow effect background */}
-
-                      <div className="absolute -inset-8 bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 rounded-[3rem] blur-3xl opacity-40 animate-pulse-glow" />
-
-                      
+                      {/* Glow effect background (Optimized) */}
+                      <div className="absolute -inset-8 bg-[radial-gradient(ellipse_at_center,hsl(var(--primary)/0.15),transparent_70%)] animate-pulse-glow" />
 
                       <div className="relative h-full rounded-2xl overflow-hidden border border-white/10 bg-[#191724]/40 backdrop-blur-2xl flex flex-col shadow-2xl">
 
@@ -169,7 +166,7 @@ const Features = () => {
 
                                     {...getLineProps({ line })}
 
-                                    className={`transition-all duration-150 ${
+                                    className={`transition-all duration-150 will-change-transform ${
 
                                       isVisible
 
