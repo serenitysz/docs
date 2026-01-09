@@ -114,6 +114,10 @@ export default {
           "0%": { width: "0%" },
           "100%": { width: "var(--bar-width)" },
         },
+        "beam": {
+          "0%": { top: "-100%" },
+          "100%": { top: "100%" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -126,6 +130,7 @@ export default {
         "fade-up": "fade-up 0.6s ease-out forwards",
         "scale-in": "scale-in 0.5s ease-out forwards",
         "bar-fill": "bar-fill 1.5s ease-out forwards",
+        "beam": "beam 2s linear infinite",
       },
     },
   },
