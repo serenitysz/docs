@@ -1,7 +1,8 @@
 import Hero from "@/components/landing/Hero";
 import Features from "@/components/landing/Features";
 import Benchmarks from "@/components/landing/Benchmarks";
-import HowItWorks from "@/components/landing/HowItWorks";
+import FAQ from "@/components/landing/FAQ";
+import Integrations from "@/components/landing/Integrations";
 import Footer from "@/components/landing/Footer";
 import Navbar from "@/components/layout/Navbar";
 
@@ -11,8 +12,9 @@ const Index = () => {
       <Navbar />
       <Hero />
       <Features />
-      <HowItWorks />
       <Benchmarks />
+      <FAQ />
+      <Integrations />
       <Footer />
     </div>
   );
