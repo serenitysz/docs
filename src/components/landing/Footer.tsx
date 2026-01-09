@@ -4,7 +4,7 @@ import serenityLogo from "@/assets/serenity-logo.png";
 
 const Footer = () => {
   return (
-    <footer className="py-12 border-t border-border bg-background">
+    <footer className="py-12 border-t border-white/5 bg-[#08080a]">
       <div className="container px-4">
         <div className="flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex items-center gap-3">
