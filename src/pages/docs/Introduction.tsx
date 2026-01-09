@@ -108,7 +108,81 @@ jobs:
 
         <h3 className="text-xl font-semibold mt-8 mb-4">Synopsis</h3>
 
-        <CodeBlock code="serenity [flags] [packages...]" language="bash" />
+        <CodeBlock code="serenity [command] [flags] [packages...]" language="bash" />
+
+        <h3 className="text-xl font-semibold mt-8 mb-4">Commands</h3>
+
+        <div className="space-y-6">
+          <div className="glow-border rounded-lg p-4 bg-card/30">
+            <code className="text-accent font-mono">init</code>
+            <p className="text-muted-foreground mt-2 mb-0">
+              Initialize a new configuration file in the current directory.
+            </p>
+            <div className="mt-4">
+              <CodeBlock code="serenity init" language="bash" />
+            </div>
+          </div>
+
+          <div className="glow-border rounded-lg p-4 bg-card/30">
+            <code className="text-accent font-mono">check &lt;path&gt;</code>
+            <p className="text-muted-foreground mt-2 mb-0">
+              Analyze code for issues. This is the default command.
+            </p>
+            <div className="mt-4">
+              <CodeBlock code="serenity check ./..." language="bash" />
+            </div>
+          </div>
+
+          <div className="glow-border rounded-lg p-4 bg-card/30">
+            <code className="text-accent font-mono">format &lt;path&gt;</code>
+            <p className="text-muted-foreground mt-2 mb-0">
+              Format Go source files according to Serenity style rules.
+            </p>
+            <div className="mt-4">
+              <CodeBlock code="serenity format ./..." language="bash" />
+            </div>
+          </div>
+
+          <div className="glow-border rounded-lg p-4 bg-card/30">
+            <code className="text-accent font-mono">migrate &lt;linter&gt;</code>
+            <p className="text-muted-foreground mt-2 mb-0">
+              Migrate configuration from another linter. Supported: <code className="text-foreground bg-muted px-1 rounded">golangci</code>
+            </p>
+            <div className="mt-4">
+              <CodeBlock code="serenity migrate golangci" language="bash" />
+            </div>
+          </div>
+
+          <div className="glow-border rounded-lg p-4 bg-card/30">
+            <code className="text-accent font-mono">enable &lt;rule&gt;</code>
+            <p className="text-muted-foreground mt-2 mb-0">
+              Enable a specific rule in your configuration.
+            </p>
+            <div className="mt-4">
+              <CodeBlock code="serenity enable no-magic-numbers" language="bash" />
+            </div>
+          </div>
+
+          <div className="glow-border rounded-lg p-4 bg-card/30">
+            <code className="text-accent font-mono">disable &lt;rule&gt;</code>
+            <p className="text-muted-foreground mt-2 mb-0">
+              Disable a specific rule in your configuration.
+            </p>
+            <div className="mt-4">
+              <CodeBlock code="serenity disable max-func-lines" language="bash" />
+            </div>
+          </div>
+
+          <div className="glow-border rounded-lg p-4 bg-card/30">
+            <code className="text-accent font-mono">update</code>
+            <p className="text-muted-foreground mt-2 mb-0">
+              Update Serenity to the latest version.
+            </p>
+            <div className="mt-4">
+              <CodeBlock code="serenity update" language="bash" />
+            </div>
+          </div>
+        </div>
 
         <h3 className="text-xl font-semibold mt-8 mb-4">Flags</h3>
 
@@ -122,6 +196,9 @@ jobs:
               <code className="text-foreground bg-muted px-1 rounded ml-1">.toml</code>.
               Default: <code className="text-foreground bg-muted px-1 rounded ml-1">serenity.json</code>
             </p>
+            <div className="mt-4">
+              <CodeBlock code="serenity check --config .serenity.dev.json ./..." language="bash" />
+            </div>
           </div>
 
           <div className="glow-border rounded-lg p-4 bg-card/30">
@@ -129,6 +206,9 @@ jobs:
             <p className="text-muted-foreground mt-2 mb-0">
               Automatically fix issues where possible.
             </p>
+            <div className="mt-4">
+              <CodeBlock code="serenity check --write ./..." language="bash" />
+            </div>
           </div>
 
           <div className="glow-border rounded-lg p-4 bg-card/30">
@@ -136,6 +216,9 @@ jobs:
             <p className="text-muted-foreground mt-2 mb-0">
               Enables aggressive auto-fixes. Use with caution and always review the diff.
             </p>
+            <div className="mt-4">
+              <CodeBlock code="serenity check --write --unsafe ./..." language="bash" />
+            </div>
           </div>
 
           <div className="glow-border rounded-lg p-4 bg-card/30">
@@ -146,6 +229,9 @@ jobs:
               <code className="text-foreground bg-muted px-1 rounded ml-1">sarif</code>,
               <code className="text-foreground bg-muted px-1 rounded ml-1">github</code>
             </p>
+            <div className="mt-4">
+              <CodeBlock code="serenity check --format json > report.json" language="bash" />
+            </div>
           </div>
 
           <div className="glow-border rounded-lg p-4 bg-card/30">
@@ -155,20 +241,9 @@ jobs:
               <code className="text-foreground bg-muted px-1 rounded ml-1">warn</code>,
               <code className="text-foreground bg-muted px-1 rounded ml-1">info</code>
             </p>
-          </div>
-
-          <div className="glow-border rounded-lg p-4 bg-card/30">
-            <code className="text-accent font-mono">enable &lt;rules&gt;</code>
-            <p className="text-muted-foreground mt-2 mb-0">
-              Comma-separated list of rules to enable.
-            </p>
-          </div>
-
-          <div className="glow-border rounded-lg p-4 bg-card/30">
-            <code className="text-accent font-mono">disable &lt;rules&gt;</code>
-            <p className="text-muted-foreground mt-2 mb-0">
-              Comma-separated list of rules to disable.
-            </p>
+            <div className="mt-4">
+              <CodeBlock code="serenity check --severity error ./..." language="bash" />
+            </div>
           </div>
 
           <div className="glow-border rounded-lg p-4 bg-card/30">
@@ -176,6 +251,9 @@ jobs:
             <p className="text-muted-foreground mt-2 mb-0">
               Glob patterns for files to exclude.
             </p>
+            <div className="mt-4">
+              <CodeBlock code='serenity check --exclude "vendor/**,**/*_test.go" ./...' language="bash" />
+            </div>
           </div>
 
           <div className="glow-border rounded-lg p-4 bg-card/30">
@@ -183,6 +261,9 @@ jobs:
             <p className="text-muted-foreground mt-2 mb-0">
               Number of parallel workers. Default: number of CPU cores.
             </p>
+            <div className="mt-4">
+              <CodeBlock code="serenity check --parallel 4 ./..." language="bash" />
+            </div>
           </div>
 
           <div className="glow-border rounded-lg p-4 bg-card/30">
@@ -190,6 +271,9 @@ jobs:
             <p className="text-muted-foreground mt-2 mb-0">
               Enable verbose output.
             </p>
+            <div className="mt-4">
+              <CodeBlock code="serenity check --verbose ./..." language="bash" />
+            </div>
           </div>
 
           <div className="glow-border rounded-lg p-4 bg-card/30">
@@ -197,13 +281,9 @@ jobs:
             <p className="text-muted-foreground mt-2 mb-0">
               Print version information and exit.
             </p>
-          </div>
-
-          <div className="glow-border rounded-lg p-4 bg-card/30">
-            <code className="text-accent font-mono">migrate &lt;linter&gt;</code>
-            <p className="text-muted-foreground mt-2 mb-0">
-              Migrate configuration from another linter. Supported: <code className="text-foreground bg-muted px-1 rounded">golangci</code>
-            </p>
+            <div className="mt-4">
+              <CodeBlock code="serenity --version" language="bash" />
+            </div>
           </div>
 
           <div className="glow-border rounded-lg p-4 bg-card/30">
@@ -211,6 +291,9 @@ jobs:
             <p className="text-muted-foreground mt-2 mb-0">
               Show help message.
             </p>
+            <div className="mt-4">
+              <CodeBlock code="serenity --help" language="bash" />
+            </div>
           </div>
         </div>
 
