@@ -22,15 +22,6 @@ const Footer = () => {
             <Link to="/docs#rules" className="hover:text-foreground transition-colors">
               Rules
             </Link>
-            <a
-              href="https://github.com/serenitysz/serenity"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-foreground transition-colors flex items-center gap-1"
-            >
-              <Github className="h-4 w-4" />
-              GitHub
-            </a>
           </nav>
 
           <div className="flex items-center gap-4">

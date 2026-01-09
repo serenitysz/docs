@@ -52,8 +52,6 @@ const Benchmarks = () => {
 
   return (
     <section id="benchmarks-section" className="py-32 bg-[#08080a] relative overflow-hidden">
-      <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-background to-[#08080a]" />
-      
       {/* Background glow effects */}
       <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[700px] h-[700px] bg-primary/5 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[700px] h-[700px] bg-accent/5 rounded-full blur-[120px] pointer-events-none" />

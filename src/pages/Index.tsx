@@ -1,7 +1,7 @@
 import Hero from "@/components/landing/Hero";
 import Features from "@/components/landing/Features";
-import HowItWorks from "@/components/landing/HowItWorks";
 import Benchmarks from "@/components/landing/Benchmarks";
+import HowItWorks from "@/components/landing/HowItWorks";
 import Footer from "@/components/landing/Footer";
 import Navbar from "@/components/layout/Navbar";
 
