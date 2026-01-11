@@ -11,7 +11,6 @@ const Footer = () => {
             <img src={serenityLogo} alt="Serenity" className="w-8 h-8 rounded object-contain" />
             <span className="font-semibold text-lg">Serenity</span>
           </div>
-
           <nav className="flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
             <Link to="/docs" className="hover:text-foreground transition-colors">
               Documentation

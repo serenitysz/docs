@@ -14,7 +14,7 @@ const faqs = [
   {
     question: "Is it compatible with my existing workflow?",
     answer:
-      "Yes. Serenity outputs standard formats (text, JSON, SARIF) and integrates seamlessly with GitHub Actions, GitLab CI, and VS Code. We also offer a migration command to import your existing linter configurations.",
+      "Yes. Serenity outputs standard formats (JSON, YML, YAML, TOML) and integrates seamlessly with GitHub Actions, GitLab CI, and VS Code. We also offer a migration command to import your existing linter configurations.",
   },
   {
     question: "Does it support auto-fixing?",
