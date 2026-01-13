@@ -21,25 +21,25 @@ export const rosePineTheme: PrismTheme = {
     {
       types: ["tag", "operator", "number"],
       style: {
-        color: "#9ccfd8", // foam
+        color: "#9ccfd8",
       },
     },
     {
       types: ["property", "function"],
       style: {
-        color: "#ebbcba", // rose
+        color: "#ebbcba",
       },
     },
     {
       types: ["tag-id", "selector", "atrule-id"],
       style: {
-        color: "#eb6f92", // love
+        color: "#eb6f92",
       },
     },
     {
       types: ["attr-name"],
       style: {
-        color: "#c4a7e7", // iris
+        color: "#c4a7e7",
       },
     },
     {
@@ -59,13 +59,13 @@ export const rosePineTheme: PrismTheme = {
         "variable",
       ],
       style: {
-        color: "#f6c177", // gold
+        color: "#f6c177",
       },
     },
     {
       types: ["keyword"],
       style: {
-        color: "#31748f", // pine
+        color: "#31748f",
       },
     },
     {

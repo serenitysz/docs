@@ -31,7 +31,6 @@ const DocsSidebar = () => {
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState("getting-started");
 
-  // Handle Scroll Spy
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -48,7 +47,7 @@ const DocsSidebar = () => {
     );
 
     const sections = sidebarItems.map((item) => document.getElementById(item.id));
-    
+
     sections.forEach((section) => {
       if (section) observer.observe(section);
     });
@@ -56,7 +55,6 @@ const DocsSidebar = () => {
     return () => observer.disconnect();
   }, []);
 
-  // Handle hash change on initial load or browser navigation
   useEffect(() => {
     if (location.hash) {
       const id = location.hash.replace("#", "");
@@ -74,7 +72,7 @@ const DocsSidebar = () => {
     e.preventDefault();
     setActiveSection(id);
     navigate(`/docs#${id}`, { replace: true });
-    
+
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
@@ -95,19 +93,19 @@ const DocsSidebar = () => {
                 onClick={(e) => handleLinkClick(e, item.id)}
                 className={cn(
                   "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group relative cursor-pointer",
-                  isActive 
-                    ? "bg-white/5 text-foreground shadow-[inset_0_0_20px_rgba(255,255,255,0.02)]" 
+                  isActive
+                    ? "bg-white/5 text-foreground shadow-[inset_0_0_20px_rgba(255,255,255,0.02)]"
                     : "text-muted-foreground hover:text-white hover:bg-white/5"
                 )}
               >
                 {isActive && (
                   <div className="absolute left-0 w-1 h-4 bg-gradient-to-b from-primary to-accent rounded-r-full" />
                 )}
-                <item.icon 
+                <item.icon
                   className={cn(
-                    "h-4 w-4 transition-colors", 
+                    "h-4 w-4 transition-colors",
                     isActive ? "text-primary" : "group-hover:text-white"
-                  )} 
+                  )}
                 />
                 <span className={cn("transition-colors", isActive ? "gradient-text font-bold" : "")}>
                   {item.title}

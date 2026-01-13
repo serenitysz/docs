@@ -155,7 +155,7 @@ const ConfigGenerator = () => {
     if (rules.noErrorShadowing) config.linter.rules.errors.noErrorShadowing = { severity: "error" };
     if (rules.errorStringFormat) config.linter.rules.errors.errorStringFormat = { severity: "warn" };
     if (rules.errorNotWrapped) config.linter.rules.errors.errorNotWrapped = { severity: "error" };
-    
+
     if (rules.redundantImportAlias) config.linter.rules.imports.redundantImportAlias = { severity: "info" };
 
     if (rules.noMagicNumbers) config.linter.rules.bestPractices.noMagicNumbers = { severity: "warn" };
@@ -184,7 +184,6 @@ const ConfigGenerator = () => {
     if (rules.commentSpacing) config.linter.rules.style.commentSpacing = { severity: "info" };
     if (rules.fileHeader) config.linter.rules.style.fileHeader = { severity: "error", header: "Copyright 2024" };
 
-    // Apply strictness adjustments
     if (strictness === "strict") {
       if (rules.maxFuncLines) (config.linter.rules.complexity.maxFuncLines as Record<string, unknown>).max = 30;
       if (rules.cyclomaticComplexity) (config.linter.rules.complexity.cyclomaticComplexity as Record<string, unknown>).max = 5;
@@ -199,7 +198,6 @@ const ConfigGenerator = () => {
       if (rules.maxLineLength) (config.linter.rules.style.maxLineLength as Record<string, unknown>).max = 140;
     }
 
-    // Apply Project Type adjustments
     if (projectType === "library") {
       config.linter.rules.naming.exportedIdentifiers = {
         severity: "error",
@@ -207,12 +205,11 @@ const ConfigGenerator = () => {
       };
     } else if (projectType === "api") {
       if (strictness !== "strict") {
-         if (rules.maxFuncLines) (config.linter.rules.complexity.maxFuncLines as Record<string, unknown>).max = 80;
-         if (rules.maxLineLength) (config.linter.rules.style.maxLineLength as Record<string, unknown>).max = 120;
+        if (rules.maxFuncLines) (config.linter.rules.complexity.maxFuncLines as Record<string, unknown>).max = 80;
+        if (rules.maxLineLength) (config.linter.rules.style.maxLineLength as Record<string, unknown>).max = 120;
       }
     }
 
-    // Apply AutoFix
     if (autoFix) {
       config.linter.assistance = {
         use: true,
@@ -234,150 +231,151 @@ const ConfigGenerator = () => {
     setRules(prev => ({ ...prev, [rule]: !prev[rule] }));
   };
 
-    return (
-      <div className="space-y-8 my-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
-          {/* Controls */}
-          <div className="flex flex-col space-y-6 bg-card/20 p-6 rounded-xl border border-white/5 backdrop-blur-sm h-full">
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold gradient-text">Configuration Generator</h3>
-              <p className="text-sm text-muted-foreground">
-                Customize your Serenity experience and generate a configuration file.
-              </p>
-            </div>
-  
-            <div className="space-y-4 flex-1">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label>Project Type</Label>
-                  <Select value={projectType} onValueChange={(v: ProjectType) => setProjectType(v)}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select project type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="standard">Standard Application</SelectItem>
-                      <SelectItem value="library">Library / Package</SelectItem>
-                      <SelectItem value="api">API Service</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-  
-                <div className="space-y-2">
-                  <Label>Strictness Level</Label>
-                  <Select value={strictness} onValueChange={(v: Strictness) => setStrictness(v)}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select strictness" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="lenient">Lenient (Critical only)</SelectItem>
-                      <SelectItem value="standard">Standard (Recommended)</SelectItem>
-                      <SelectItem value="strict">Strict (High Quality)</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-  
-              <div className="flex items-center justify-between py-2 border-b border-white/5">
-                <div className="space-y-0.5">
-                  <Label>Enable Auto-fix</Label>
-                  <div className="text-xs text-muted-foreground">Allow Serenity to modify files</div>
-                </div>
-                <Switch checked={autoFix} onCheckedChange={setAutoFix} />
-              </div>
-              
-              <div className="space-y-6">
-                <Label className="text-sm font-semibold text-foreground">Active Rules</Label>
-                <div className="space-y-4 max-h-[400px] overflow-y-auto pr-4 custom-scrollbar">
-                  {categories.map((category) => {
-                    const isOpen = openCategories[category.name];
-                    return (
-                      <div key={category.name} className="space-y-3 bg-white/[0.02] rounded-lg border border-white/5 overflow-hidden transition-all duration-200">
-                        <button
-                          onClick={() => toggleCategory(category.name)}
-                          className="w-full flex items-center justify-between p-3 hover:bg-white/5 transition-colors group"
-                        >
-                          <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground/70 group-hover:text-foreground transition-colors">
-                            {category.name}
-                          </h4>
-                          {isOpen ? (
-                            <ChevronDown className="h-3 w-3 text-muted-foreground" />
-                          ) : (
-                            <ChevronRight className="h-3 w-3 text-muted-foreground" />
-                          )}
-                        </button>
-                        
-                        {isOpen && (
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 p-3 pt-0 animate-in fade-in slide-in-from-top-1 duration-200">
-                            {category.rules.map((rule) => (
-                              <div key={rule} className="flex items-center space-x-2 p-2 rounded-md hover:bg-white/5 transition-colors">
-                                <Checkbox 
-                                  id={rule} 
-                                  checked={rules[rule as keyof typeof rules]} 
-                                  onCheckedChange={() => toggleRule(rule as keyof typeof rules)}
-                                />
-                                <label 
-                                  htmlFor={rule} 
-                                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer text-muted-foreground"
-                                >
-                                  {rule}
-                                </label>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-  
-              <div className="space-y-2 pt-2 border-t border-white/5">
-                <Label>Output Format</Label>
-                <div className="flex p-1 bg-muted/50 rounded-lg">
-                  {(["json", "yaml", "yml", "toml"] as Format[]).map((fmt) => (
-                    <button
-                      key={fmt}
-                      onClick={() => setFormat(fmt)}
-                      className={`flex-1 px-3 py-1.5 text-sm font-medium rounded-md transition-all ${format === fmt 
-                        ? "bg-primary/20 text-primary shadow-sm" 
-                        : "text-muted-foreground hover:text-foreground hover:bg-white/5"
-                      }`}
-                    >
-                      {fmt.toUpperCase()}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
+  return (
+    <div className="space-y-8 my-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+        {/* Controls */}
+        <div className="flex flex-col space-y-6 bg-card/20 p-6 rounded-xl border border-white/5 backdrop-blur-sm h-full">
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold gradient-text">Configuration Generator</h3>
+            <p className="text-sm text-muted-foreground">
+              Customize your Serenity experience and generate a configuration file.
+            </p>
           </div>
-  
-          {/* Output */}
-          <div className={cn("relative group transition-all duration-500", isExpanded ? "h-auto" : "h-[600px]")}>
-            <CodeBlock 
-              code={generatedConfig} 
-              language={format} 
-              filename={`serenity.${format}`} 
-              className={cn("transition-all duration-500", isExpanded ? "h-auto" : "h-full")}
-              autoHeight={isExpanded}
-            />
-            
-            {!isExpanded && (
-              <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#191724] via-[#191724]/80 to-transparent z-10 pointer-events-none rounded-b-2xl" />
-            )}
 
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={() => setIsExpanded(!isExpanded)}
-              className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 shadow-xl bg-white/10 backdrop-blur-md border border-white/10 hover:bg-white/20 text-white transition-all hover:scale-105 active:scale-95"
-            >
-              <ChevronsUpDown className="mr-2 h-3 w-3" />
-              {isExpanded ? "Collapse" : "See more"}
-            </Button>
+          <div className="space-y-4 flex-1">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>Project Type</Label>
+                <Select value={projectType} onValueChange={(v: ProjectType) => setProjectType(v)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select project type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="standard">Standard Application</SelectItem>
+                    <SelectItem value="library">Library / Package</SelectItem>
+                    <SelectItem value="api">API Service</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Strictness Level</Label>
+                <Select value={strictness} onValueChange={(v: Strictness) => setStrictness(v)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select strictness" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="lenient">Lenient (Critical only)</SelectItem>
+                    <SelectItem value="standard">Standard (Recommended)</SelectItem>
+                    <SelectItem value="strict">Strict (High Quality)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between py-2 border-b border-white/5">
+              <div className="space-y-0.5">
+                <Label>Enable Auto-fix</Label>
+                <div className="text-xs text-muted-foreground">Allow Serenity to modify files</div>
+              </div>
+              <Switch checked={autoFix} onCheckedChange={setAutoFix} />
+            </div>
+
+            <div className="space-y-6">
+              <Label className="text-sm font-semibold text-foreground">Active Rules</Label>
+              <div className="space-y-4 max-h-[400px] overflow-y-auto pr-4 custom-scrollbar">
+                {categories.map((category) => {
+                  const isOpen = openCategories[category.name];
+                  return (
+                    <div key={category.name} className="space-y-3 bg-white/[0.02] rounded-lg border border-white/5 overflow-hidden transition-all duration-200">
+                      <button
+                        onClick={() => toggleCategory(category.name)}
+                        className="w-full flex items-center justify-between p-3 hover:bg-white/5 transition-colors group"
+                      >
+                        <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground/70 group-hover:text-foreground transition-colors">
+                          {category.name}
+                        </h4>
+                        {isOpen ? (
+                          <ChevronDown className="h-3 w-3 text-muted-foreground" />
+                        ) : (
+                          <ChevronRight className="h-3 w-3 text-muted-foreground" />
+                        )}
+                      </button>
+
+                      {isOpen && (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 p-3 pt-0 animate-in fade-in slide-in-from-top-1 duration-200">
+                          {category.rules.map((rule) => (
+                            <div key={rule} className="flex items-center space-x-2 p-2 rounded-md hover:bg-white/5 transition-colors">
+                              <Checkbox
+                                id={rule}
+                                checked={rules[rule as keyof typeof rules]}
+                                onCheckedChange={() => toggleRule(rule as keyof typeof rules)}
+                              />
+                              <label
+                                htmlFor={rule}
+                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer text-muted-foreground"
+                              >
+                                {rule}
+                              </label>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="space-y-2 pt-2 border-t border-white/5">
+              <Label>Output Format</Label>
+              <div className="flex p-1 bg-muted/50 rounded-lg">
+                {(["json", "yaml", "yml", "toml"] as Format[]).map((fmt) => (
+                  <button
+                    key={fmt}
+                    onClick={() => setFormat(fmt)}
+                    className={`flex-1 px-3 py-1.5 text-sm font-medium rounded-md transition-all ${format === fmt
+                      ? "bg-primary/20 text-primary shadow-sm"
+                      : "text-muted-foreground hover:text-foreground hover:bg-white/5"
+                      }`}
+                  >
+                    {fmt.toUpperCase()}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
+
+        {/* Output */}
+        <div className={cn("relative group transition-all duration-500", isExpanded ? "h-auto" : "h-[600px]")}>
+          <CodeBlock
+            code={generatedConfig}
+            language={format}
+            filename={`serenity.${format}`}
+            className={cn("transition-all duration-500", isExpanded ? "h-auto" : "h-full")}
+            autoHeight={isExpanded}
+          />
+
+          {!isExpanded && (
+            <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#191724] via-[#191724]/80 to-transparent z-10 pointer-events-none rounded-b-2xl" />
+          )}
+
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 shadow-xl bg-white/10 backdrop-blur-md border border-white/10 hover:bg-white/20 text-white transition-all hover:scale-105 active:scale-95"
+          >
+            <ChevronsUpDown className="mr-2 h-3 w-3" />
+            {isExpanded ? "Collapse" : "See more"}
+          </Button>
+        </div>
       </div>
-    );};
+    </div>
+  );
+};
 
 export default ConfigGenerator;
 
@@ -396,11 +394,11 @@ const toYaml = (obj: Record<string, unknown>, indent = ""): string => {
   for (const key in obj) {
     const value = obj[key];
     if (typeof value === "object" && value !== null) {
-      if (Object.keys(value).length === 0) continue; 
+      if (Object.keys(value).length === 0) continue;
       output += `${indent}${key}:\n${toYaml(value as Record<string, unknown>, indent + "  ")}`;
     } else {
-       const valStr = typeof value === "string" ? `"${value}"` : value;
-       output += `${indent}${key}: ${valStr}\n`;
+      const valStr = typeof value === "string" ? `"${value}"` : value;
+      output += `${indent}${key}: ${valStr}\n`;
     }
   }
   return output;
@@ -408,24 +406,24 @@ const toYaml = (obj: Record<string, unknown>, indent = ""): string => {
 
 const toToml = (obj: Record<string, unknown>): string => {
   const output = `"$schema" = "${obj.$schema}"\n\n`;
-  
+
   const serializeSection = (prefix: string, section: Record<string, unknown>) => {
     let out = "";
-    for(const key in section) {
-      if(typeof section[key] !== 'object') {
-         const val = typeof section[key] === "string" ? `"${section[key]}"` : section[key];
-         out += `${key} = ${val}\n`;
+    for (const key in section) {
+      if (typeof section[key] !== 'object') {
+        const val = typeof section[key] === "string" ? `"${section[key]}"` : section[key];
+        out += `${key} = ${val}\n`;
       }
     }
-    for(const key in section) {
-      if(typeof section[key] === 'object' && section[key] !== null) {
-         if (Object.keys(section[key] as object).length === 0) continue;
-         out += `\n[${prefix}${key}]\n`;
-         out += serializeSection(`${prefix}${key}.`, section[key] as Record<string, unknown>);
+    for (const key in section) {
+      if (typeof section[key] === 'object' && section[key] !== null) {
+        if (Object.keys(section[key] as object).length === 0) continue;
+        out += `\n[${prefix}${key}]\n`;
+        out += serializeSection(`${prefix}${key}.`, section[key] as Record<string, unknown>);
       }
     }
     return out;
   }
 
-  return output + serializeSection("", obj.linter ? {linter: obj.linter} as Record<string, unknown> : obj);
+  return output + serializeSection("", obj.linter ? { linter: obj.linter } as Record<string, unknown> : obj);
 };
