@@ -182,6 +182,26 @@ jobs:
               <CodeBlock code="serenity update" language="bash" />
             </div>
           </div>
+
+          <div className="glow-border rounded-lg p-4 bg-card/30">
+            <code className="text-accent font-mono">status</code>
+            <p className="text-muted-foreground mt-2 mb-0">
+              Display version, build information, and configuration status.
+            </p>
+            <div className="mt-4">
+              <CodeBlock code="serenity status" language="bash" />
+            </div>
+          </div>
+
+          <div className="glow-border rounded-lg p-4 bg-card/30">
+            <code className="text-accent font-mono">docs</code>
+            <p className="text-muted-foreground mt-2 mb-0">
+              Open the documentation in your default browser.
+            </p>
+            <div className="mt-4">
+              <CodeBlock code="serenity docs" language="bash" />
+            </div>
+          </div>
         </div>
 
         <h3 className="text-xl font-semibold mt-8 mb-4">Flags</h3>

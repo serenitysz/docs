@@ -84,6 +84,16 @@ const ConfigGenerator = () => {
     packageComments: true,
     commentSpacing: true,
     fileHeader: false,
+    // New rules
+    maxNestingDepth: true,
+    emptyBlock: true,
+    unusedReceiver: true,
+    unusedParams: true,
+    noDotImports: true,
+    disallowedPackages: false,
+    noBareReturns: true,
+    avoidEmptyStructs: true,
+    importedIdentifiers: true,
   });
 
   const categories = [
@@ -93,7 +103,7 @@ const ConfigGenerator = () => {
     },
     {
       name: "Imports",
-      rules: ["redundantImportAlias"],
+      rules: ["redundantImportAlias", "noDotImports", "disallowedPackages"],
     },
     {
       name: "Best Practices",
@@ -108,19 +118,21 @@ const ConfigGenerator = () => {
         "getMustReturnValue",
         "preferEarlyReturn",
         "redundantErrorCheck",
+        "noBareReturns",
+        "avoidEmptyStructs",
       ],
     },
     {
       name: "Correctness",
-      rules: ["boolLiteralExpressions", "ambiguousReturns"],
+      rules: ["boolLiteralExpressions", "ambiguousReturns", "emptyBlock", "unusedReceiver", "unusedParams"],
     },
     {
       name: "Complexity",
-      rules: ["maxFuncLines", "cyclomaticComplexity"],
+      rules: ["maxFuncLines", "cyclomaticComplexity", "maxNestingDepth"],
     },
     {
       name: "Naming",
-      rules: ["receiverNames", "bannedChars"],
+      rules: ["receiverNames", "bannedChars", "importedIdentifiers"],
     },
     {
       name: "Style",
@@ -157,6 +169,8 @@ const ConfigGenerator = () => {
     if (rules.errorNotWrapped) config.linter.rules.errors.errorNotWrapped = { severity: "error" };
 
     if (rules.redundantImportAlias) config.linter.rules.imports.redundantImportAlias = { severity: "info" };
+    if (rules.noDotImports) config.linter.rules.imports.noDotImports = { severity: "error" };
+    if (rules.disallowedPackages) config.linter.rules.imports.disallowedPackages = { severity: "error", packages: ["log"] };
 
     if (rules.noMagicNumbers) config.linter.rules.bestPractices.noMagicNumbers = { severity: "warn" };
     if (rules.maxParams) config.linter.rules.bestPractices.maxParams = { max: 5 };
@@ -168,15 +182,22 @@ const ConfigGenerator = () => {
     if (rules.getMustReturnValue) config.linter.rules.bestPractices.getMustReturnValue = { severity: "warn" };
     if (rules.preferEarlyReturn) config.linter.rules.bestPractices.preferEarlyReturn = { severity: "info" };
     if (rules.redundantErrorCheck) config.linter.rules.bestPractices.redundantErrorCheck = { severity: "warn" };
+    if (rules.noBareReturns) config.linter.rules.bestPractices.noBareReturns = { severity: "error" };
+    if (rules.avoidEmptyStructs) config.linter.rules.bestPractices.avoidEmptyStructs = { severity: "warn" };
 
     if (rules.boolLiteralExpressions) config.linter.rules.correctness.boolLiteralExpressions = { severity: "info" };
     if (rules.ambiguousReturns) config.linter.rules.correctness.ambiguousReturns = { severity: "warn" };
+    if (rules.emptyBlock) config.linter.rules.correctness.emptyBlock = { severity: "error" };
+    if (rules.unusedReceiver) config.linter.rules.correctness.unusedReceiver = { severity: "error" };
+    if (rules.unusedParams) config.linter.rules.correctness.unusedParams = { severity: "error" };
 
     if (rules.maxFuncLines) config.linter.rules.complexity.maxFuncLines = { severity: "warn", max: 60 };
     if (rules.cyclomaticComplexity) config.linter.rules.complexity.cyclomaticComplexity = { severity: "warn", max: 10 };
+    if (rules.maxNestingDepth) config.linter.rules.complexity.maxNestingDepth = { severity: "warn", max: 5 };
 
     if (rules.receiverNames) config.linter.rules.naming.receiverNames = { severity: "info", maxSize: 3 };
     if (rules.bannedChars) config.linter.rules.naming.bannedChars = { severity: "error", chars: ["\u200b"] };
+    if (rules.importedIdentifiers) config.linter.rules.naming.importedIdentifiers = { severity: "error", pattern: "^[a-z][a-z0-9]*$" };
 
     if (rules.preferIncDec) config.linter.rules.style.preferIncDec = { severity: "info" };
     if (rules.maxLineLength) config.linter.rules.style.maxLineLength = { severity: "warn", max: 120 };
