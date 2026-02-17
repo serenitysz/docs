@@ -2,43 +2,31 @@ import { useEffect, useState } from "react";
 import { Zap, Shield, Terminal, Settings } from "lucide-react";
 import { Highlight } from "prism-react-renderer";
 import { rosePineTheme } from "@/lib/prism-theme";
+import "prismjs/components/prism-bash";
 
 const codeLines = [
-  'package main',
+  '# serenity.json',
   '',
-  'import (',
-  '    "context"',
-  '    "fmt"',
-  '    "time"',
-  ')',
-  '',
-  'func WorkerPool(ctx context.Context, workers int) {',
-  '    jobs := make(chan int, 100)',
-  '    results := make(chan int, 100)',
-  '',
-  '    for w := 1; w <= workers; w++ {',
-  '        go func(id int) {',
-  '            for j := range jobs {',
-  '                select {',
-  '                case <-ctx.Done():',
-  '                    return',
-  '                default:',
-  '                    time.Sleep(10 * time.Millisecond)',
-  '                    results <- j * 2',
-  '                }',
-  '            }',
-  '        }(w)',
-  '    }',
-  '',
-  '    for j := 1; j <= 50; j++ {',
-  '        jobs <- j',
-  '    }',
-  '    close(jobs)',
-  '',
-  '    for a := 1; a <= 50; a++ {',
-  '        fmt.Printf("Result: %d\\n", <-results)',
-  '    }',
+  '{',
+  '  "severity": "warn",',
+  '  "exclude": ["vendor/**", "**/*_generated.go"],',
+  '  "rules": {',
+  '    "no-magic-numbers": true,',
+  '    "error-not-wrapped": true,',
+  '    "context-first-param": true',
+  '  }',
   '}',
+  '',
+  '# run locally with auto-fix',
+  'serenity check --write ./...',
+  '',
+  '# run in CI and fail only on errors',
+  'serenity check --severity error --format github ./...',
+  '',
+  '# sample output',
+  'internal/service/user.go:44:13  warn  no-magic-numbers',
+  'internal/http/handler.go:88:9   error error-not-wrapped',
+  '2 issues found (1 fixed, 1 remaining)',
 ];
 
 const features = [
@@ -152,7 +140,7 @@ const Features = () => {
 
                         <div className="p-8 font-mono text-sm md:text-base overflow-x-auto relative z-0 flex-1 scrollbar-none">
 
-                          <Highlight theme={rosePineTheme} code={codeString} language="go">
+                          <Highlight theme={rosePineTheme} code={codeString} language="bash">
 
                             {({ className, style, tokens, getLineProps, getTokenProps }) => (
 

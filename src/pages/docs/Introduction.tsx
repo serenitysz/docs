@@ -299,17 +299,38 @@ jobs:
 
         <h3 className="text-xl font-semibold mt-8 mb-4">Examples</h3>
 
-        <p className="text-muted-foreground mb-4">Lint all packages with auto-fix:</p>
-        <CodeBlock code="serenity check --write ./..." language="bash" />
+        <p className="text-muted-foreground mb-4">Day-to-day local workflow (fast feedback with safe fixes):</p>
+        <CodeBlock
+          code={`serenity check ./...
+serenity check --write ./...
+git diff --name-only`}
+          language="bash"
+        />
 
-        <p className="text-muted-foreground mb-4">Output in JSON format for CI:</p>
-        <CodeBlock code="serenity --format json ./..." language="bash" />
+        <p className="text-muted-foreground mb-4">Strict CI gate (fail only on errors and export machine-readable report):</p>
+        <CodeBlock
+          code={`serenity check --severity error --format json ./... > serenity-report.json
+cat serenity-report.json | jq '.summary'`}
+          language="bash"
+        />
 
-        <p className="text-muted-foreground mb-4">Only show errors, ignore warnings:</p>
-        <CodeBlock code="serenity --severity error ./..." language="bash" />
+        <p className="text-muted-foreground mb-4">Validate a single package while developing a feature:</p>
+        <CodeBlock
+          code="serenity check ./internal/service/..."
+          language="bash"
+        />
 
-        <p className="text-muted-foreground mb-4">Use custom config and exclude tests:</p>
-        <CodeBlock code='serenity --config .serenity.json --exclude "**/*_test.go" ./...' language="bash" />
+        <p className="text-muted-foreground mb-4">Use a CI-specific config and skip generated/test files:</p>
+        <CodeBlock
+          code='serenity check --config .serenity.ci.json --exclude "**/*_generated.go,**/*_test.go" ./...'
+          language="bash"
+        />
+
+        <p className="text-muted-foreground mb-4">Monorepo run with parallel workers and GitHub-friendly output:</p>
+        <CodeBlock
+          code="serenity check --parallel 8 --format github ./services/... ./packages/..."
+          language="bash"
+        />
       </section>
 
       <section id="rules" className="scroll-mt-20">
