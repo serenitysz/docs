@@ -10,6 +10,13 @@ export const addToWaitlist = async (email: string): Promise<WaitlistResponse> =>
     return { success: false, message: "Invalid email address." };
   }
 
+  if (!supabase) {
+    return {
+      success: false,
+      message: "Waitlist is temporarily unavailable. Please try again later.",
+    };
+  }
+
   try {
     const { error } = await supabase
       .from("waitlist")

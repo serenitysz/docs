@@ -23,6 +23,12 @@ const Admin = () => {
   const navigate = useNavigate();
 
   const fetchEntries = useCallback(async () => {
+    if (!supabase) {
+      setEntries([]);
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
     const { data, error } = await supabase
       .from("waitlist")
@@ -39,6 +45,11 @@ const Admin = () => {
   }, []);
 
   const checkUser = useCallback(async () => {
+    if (!supabase) {
+      setLoading(false);
+      return;
+    }
+
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
       navigate("/login");
@@ -52,6 +63,11 @@ const Admin = () => {
   }, [checkUser]);
 
   const handleLogout = async () => {
+    if (!supabase) {
+      navigate("/");
+      return;
+    }
+
     await supabase.auth.signOut();
     navigate("/login");
   };
@@ -62,6 +78,11 @@ const Admin = () => {
   };
 
   const handleSendNewsletter = async () => {
+    if (!supabase) {
+      toast.error("Newsletter is unavailable while Supabase is not configured.");
+      return;
+    }
+
     if (!subject.trim() || !message.trim()) {
       toast.error("Please fill in both subject and message");
       return;
@@ -91,6 +112,20 @@ const Admin = () => {
       setSending(false);
     }
   };
+
+  if (!supabase) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#08080a] p-4">
+        <div className="w-full max-w-md space-y-4 bg-white/5 p-8 rounded-2xl border border-white/10 backdrop-blur-xl text-center">
+          <img src={serenityLogo} alt="Serenity" className="w-16 h-16 mx-auto object-contain" />
+          <h2 className="text-2xl font-bold text-foreground">Admin Unavailable</h2>
+          <p className="text-muted-foreground text-sm">
+            Supabase is not configured in this environment yet.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#08080a]">

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Zap, Shield, Terminal, Settings } from "lucide-react";
 import { Highlight } from "prism-react-renderer";
+import "@/lib/prism-setup";
 import { rosePineTheme } from "@/lib/prism-theme";
 import "prismjs/components/prism-bash";
 

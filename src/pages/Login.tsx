@@ -14,6 +14,12 @@ const Login = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!supabase) {
+      toast.error("Admin login is unavailable while Supabase is not configured.");
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -34,6 +40,20 @@ const Login = () => {
       setLoading(false);
     }
   };
+
+  if (!supabase) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#08080a] p-4">
+        <div className="w-full max-w-md space-y-4 bg-white/5 p-8 rounded-2xl border border-white/10 backdrop-blur-xl text-center">
+          <img src={serenityLogo} alt="Serenity" className="w-16 h-16 mx-auto object-contain" />
+          <h2 className="text-2xl font-bold text-foreground">Admin Unavailable</h2>
+          <p className="text-muted-foreground text-sm">
+            Supabase is not configured in this environment yet.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#08080a] p-4">
